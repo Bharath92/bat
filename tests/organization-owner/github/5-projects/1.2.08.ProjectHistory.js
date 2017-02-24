@@ -138,28 +138,56 @@ describe('Project History',
           }
         );
 
-//        it('Delete Run',
-//          function (done) {
-//            this.timeout(0);
-//            shippable.deleteRunById(runId,
-//              function (err) {
-//                if (err) {
-//                  isTestFailed = true;
-//                  var testCase =
-//                    util.format(
-//                      '\n - [ ] %s delete run failed with error: %s' +
-//                      testSuiteDesc, err);
-//                  testCaseErrors.push(testCase);
-//                  assert.equal(err, null);
-//                  return done();
-//                } else {
-//                  logger.debug('Run Deleted');
-//                  return done();
-//                }
-//              }
-//            );
-//          }
-//        );
+        it('Delete Run',
+          function (done) {
+            this.timeout(0);
+            shippable.deleteRunById(runId,
+              function (err) {
+                if (err) {
+                  isTestFailed = true;
+                  var testCase =
+                    util.format(
+                      '\n - [ ] %s delete run failed with error: %s' +
+                      testSuiteDesc, err);
+                  testCaseErrors.push(testCase);
+                  assert.equal(err, null);
+                  return done();
+                } else {
+                  logger.debug('Run Deleted');
+                  return done();
+                }
+              }
+            );
+          }
+        );
+
+        it('Trigger new build request',
+          function (done) {
+            this.timeout(0);
+            var payload = {
+              runId: run.id
+            };
+            shippable.triggerNewBuildByProjectId(projectId, {},
+              function (err, run) {
+                if (err) {
+                  isTestFailed = true;
+                  var testCase =
+                    util.format(
+                      '\n - [ ] %s Trigger new build request for projectId:' +
+                      ' %s failed with error: %s', testSuiteDesc, run.projectId,
+                      err);
+                  testCaseErrors.push(testCase);
+                  assert.equal(err, null);
+                  return done();
+                } else {
+                  logger.debug('Triggered new build with runId: ' + run.runId);
+                  return done();
+                }
+              }
+            );
+          }
+        );
+
       }
     );
 
