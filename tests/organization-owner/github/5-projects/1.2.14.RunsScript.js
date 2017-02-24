@@ -61,32 +61,25 @@ describe('Runs Script',
         it('Get Jobs Script',
           function (done) {
             this.timeout(0);
-            var failedJobId;
             async.each(jobIds,
               function (jobId, nextJobId) {
                 shippable.getJobById(jobId,
                   function (err, job) {
                     if (err) {
-                      failedJobId = job.id;
-                      return nextJobId(err);
+                      isTestFailed = true;
+                      var testCase =
+                        util.format(
+                          '\n- [ ] %s: get Job Scripts failed with error: %s ' +
+                          'for jobId: %s', testSuite, err, job.id);
+                      testCaseErrors.push(testCase);
+                      assert.equal(err, null);
+                      return nextJobId();
                     }
                     return nextJobId();
                   }
                 );
               },
-              function (err) {
-                if (err) {
-                  isTestFailed = true;
-                  var testCase =
-                    util.format(
-                      '\n - [ ] %s get jobs script failed with error: %s for ' +
-                      'jobId: %s', testSuiteDesc, err, failedJobId);
-                  testCaseErrors.push(testCase);
-                  assert.equal(err, null);
-                  return done();
-                }
-                logger.debug('Successfully fetched job scripts for jobIds: ',
-                  jobIds.toString());
+              function () {
                 return done();
               }
             );
