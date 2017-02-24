@@ -138,28 +138,28 @@ describe('Project History',
           }
         );
 
-        it('Delete Run',
-          function (done) {
-            this.timeout(0);
-            shippable.deleteRunById(runId,
-              function (err) {
-                if (err) {
-                  isTestFailed = true;
-                  var testCase =
-                    util.format(
-                      '\n - [ ] %s delete run failed with error: %s' +
-                      testSuiteDesc, err);
-                  testCaseErrors.push(testCase);
-                  assert.equal(err, null);
-                  return done();
-                } else {
-                  logger.debug('Run Deleted');
-                  return done();
-                }
-              }
-            );
-          }
-        );
+//        it('Delete Run',
+//          function (done) {
+//            this.timeout(0);
+//            shippable.deleteRunById(runId,
+//              function (err) {
+//                if (err) {
+//                  isTestFailed = true;
+//                  var testCase =
+//                    util.format(
+//                      '\n - [ ] %s delete run failed with error: %s' +
+//                      testSuiteDesc, err);
+//                  testCaseErrors.push(testCase);
+//                  assert.equal(err, null);
+//                  return done();
+//                } else {
+//                  logger.debug('Run Deleted');
+//                  return done();
+//                }
+//              }
+//            );
+//          }
+//        );
       }
     );
 
