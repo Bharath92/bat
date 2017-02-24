@@ -14,15 +14,7 @@ function setupMS(params) {
   if (_.has(params, 'inputQueue'))
     global.config.inputQueue = params.inputQueue;
 
-  global.config.runMode = process.env.RUN_MODE;
-
   global.config.logLevel = 'debug';
-  if (config.runMode === 'dev')
-    global.config.logLevel = 'debug';
-  else if (config.runMode === 'beta')
-    global.config.logLevel = 'verbose';
-  else if (config.runMode === 'production')
-    global.config.logLevel = 'warn';
 
   require('./logging/logger.js');
   require('./handleErrors/ActErr.js');
