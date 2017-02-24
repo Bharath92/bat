@@ -71,6 +71,7 @@ describe('Subscriptions Dashboard',
                   assert.equal(err, null);
                   return done();
                 } else {
+                  console.log('runs', runs.length);
                   run = _.first(runs);
                   runId = run.id;
                   logger.debug('Fetched run status By SubscriptionId: '+ subscriptionId);
