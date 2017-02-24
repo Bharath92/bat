@@ -1,4 +1,4 @@
-/*'use strict';
+'use strict';
 
 var mocha = require('mocha');
 var nconf = require('nconf');
@@ -92,4 +92,3 @@ describe('Disable Project',
     );
   }
 );
-*/
