@@ -43,7 +43,7 @@ describe('Runs Tests',
                   isTestFailed = true;
                   var testCase =
                     util.format(
-                      '\n - [ ] %s get jobs failed with error: %s for runId: %s' +
+                      '\n - [ ] %s get jobs failed with error: %s for runId: %s',
                       testSuiteDesc, err, runId);
                   testCaseErrors.push(testCase);
                   assert.equal(err, null);

@@ -61,18 +61,20 @@ describe('Subscriptions Dashboard',
             shippable.getRunStatusBySubscriptionId(subscriptionId, query,
               function (err, runs) {
                 if (err) {
+                  console.log('no runs', runs);
                   isTestFailed = true;
                   var testCase =
                     util.format(
-                      '\n - [ ] %s get projects failed with error: %s for subscriptionId: %s' +
+                      '\n - [ ] %s get projects failed with error: %s for subscriptionId: %s',
                       testSuiteDesc, err, subscriptionId);
                   testCaseErrors.push(testCase);
                   assert.equal(err, null);
                   return done();
                 } else {
+                  console.log('runs', _.first(runs));
                   run = _.first(runs);
                   runId = run.id;
-                  logger.debug('Fetched projects By SubscriptionId: '+ subscriptionId);
+                  logger.debug('Fetched run status By SubscriptionId: '+ subscriptionId);
                   return done();
                 }
               }
