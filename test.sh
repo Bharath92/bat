@@ -21,7 +21,7 @@ setupTestEnv() {
   npm run test-tokenExchange
   npm run test-getAccounts
   npm run test-organizationOwner
-  #npm run test-deleteAccounts
+  npm run test-deleteAccounts
   popd
 
   echo "Completed Testing Env setup" $RES_REPO
