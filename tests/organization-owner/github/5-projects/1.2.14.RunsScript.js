@@ -7,7 +7,7 @@ var _ = require('underscore');
 var assert = chai.assert;
 var async = require('async');
 var testSuiteNum = '1.';
-var testSuiteDesc = 'Runs Tests';
+var testSuiteDesc = 'Runs Script';
 var adapter = require('../../../../_common/shippable/github/Adapter.js');
 var Shippable = require('../../../../_common/shippable/Adapter.js');
 
@@ -22,7 +22,7 @@ var runId;
 var jobIds = [];
 var jobs;
 
-describe('Runs Tests',
+describe('Runs Script',
   function () {
 
     describe(testSuite,
@@ -35,7 +35,7 @@ describe('Runs Tests',
             nconf.argv().env().file({file: pathToJson});
             nconf.load();
             shippable = new Shippable(config.apiToken);
-            runId = nconf.get("shiptest-GITHUB_ORG_1:runId");
+            runId = nconf.get('shiptest-GITHUB_ORG_1:runId');
             var query = util.format('runIds=%s', runId);
             shippable.getJobs(query,
               function (err, res) {
@@ -43,7 +43,7 @@ describe('Runs Tests',
                   isTestFailed = true;
                   var testCase =
                     util.format(
-                      '\n - [ ] %s get jobs failed with error: %s for runId: %s' +
+                      '\n - [ ] %s get jobs failed with error: %s for runId: %s',
                       testSuiteDesc, err, runId);
                   testCaseErrors.push(testCase);
                   assert.equal(err, null);
@@ -51,29 +51,26 @@ describe('Runs Tests',
                 }
                 jobs = res;
                 jobIds = _.pluck(jobs, 'id');
-                logger.debug('Fetched jobs By runId: '+ runId);
+                logger.debug('Fetched jobs By runId: ' + runId);
                 return done();
               }
             );
           }
         );
 
-        it('Get Job Test Reports',
+        it('Get Jobs Script',
           function (done) {
             this.timeout(0);
-            var failedJobId;
             async.each(jobIds,
               function (jobId, nextJobId) {
-                var query = util.format('jobIds=%s', jobId);
-                shippable.getJobTestReports(query,
-                  function (err) {
+                shippable.getJobById(jobId,
+                  function (err, job) {
                     if (err) {
-                      failedJobId = jobId;
                       isTestFailed = true;
                       var testCase =
                         util.format(
-                          '\n - [ ] %s get job test reports failed with error: %s for jobId: %s' +
-                          testSuiteDesc, err, failedJobId);
+                          '\n- [ ] %s: get Job Scripts failed with error: %s ' +
+                          'for jobId: %s', testSuite, err, job.id);
                       testCaseErrors.push(testCase);
                       assert.equal(err, null);
                       return nextJobId();
@@ -101,7 +98,7 @@ describe('Runs Tests',
                 new adapter(config.githubToken, config.githubUrl);
               var title = util.format('Failed test suite %s', testSuite);
               var body = util.format(
-                'Failed test cases are:\n%s',testCaseErrors);
+                'Failed test cases are:\n%s', testCaseErrors);
               var data = {
                 title: title,
                 body: body
@@ -109,7 +106,7 @@ describe('Runs Tests',
               githubAdapter.pushRespositoryIssue('deepikasl', 'VT1', data,
                 function(err) {
                   if (err)
-                    logger.warn("Creating Issue failed with error: ", err);
+                    logger.warn('Creating Issue failed with error: ', err);
                   return done();
                 }
               );
