@@ -114,8 +114,9 @@ describe('Subscriptions Dashboard',
         it('Get inflight runs',
           function (done) {
             var shippable = new Shippable(config.apiToken);
-            var query = util.format('type=ci&status=incomplete&subscriptionIds=',
-              subscriptionId);
+            var query =
+              util.format('type=ci&status=incomplete&subscriptionIds=%s',
+                subscriptionId);
             shippable.getRuns(query,
               function (err) {
                 if (err) {
