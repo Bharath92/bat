@@ -56,12 +56,12 @@ describe('Subscriptions Dashboard',
         it('Get Run Status By SubscriptionId',
           function (done) {
             this.timeout(0);
+            console.log('config.apiToken', config.apiToken, 'subscriptionId', subscriptionId);
             var shippable = new Shippable(config.apiToken);
             var query = 'type=ci&isGitTag=false';
             shippable.getRunStatusBySubscriptionId(subscriptionId, query,
               function (err, runs) {
                 if (err) {
-                  console.log('no runs', runs);
                   isTestFailed = true;
                   var testCase =
                     util.format(
@@ -71,7 +71,6 @@ describe('Subscriptions Dashboard',
                   assert.equal(err, null);
                   return done();
                 } else {
-                  console.log('runs', _.first(runs));
                   run = _.first(runs);
                   runId = run.id;
                   logger.debug('Fetched run status By SubscriptionId: '+ subscriptionId);
