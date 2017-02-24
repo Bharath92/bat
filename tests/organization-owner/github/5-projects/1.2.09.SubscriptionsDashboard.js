@@ -46,6 +46,7 @@ describe('Subscriptions Dashboard',
                 } else {
                   projs = projects;
                   logger.debug('Fetched projects By SubscriptionId: '+ subscriptionId);
+                  console.log('subscriptionId', subscriptionId);
                   return done();
                 }
               }
