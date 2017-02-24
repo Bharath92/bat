@@ -78,15 +78,15 @@ describe('Runs Script',
                 if (err) {
                   isTestFailed = true;
                   var testCase =
-                  util.format(
-                    '\n - [ ] %s get jobs script failed with error: %s for ' +
-                    'jobId: %s', testSuiteDesc, err, failedJobId);
+                    util.format(
+                      '\n - [ ] %s get jobs script failed with error: %s for ' +
+                      'jobId: %s', testSuiteDesc, err, failedJobId);
                   testCaseErrors.push(testCase);
                   assert.equal(err, null);
                   return done();
                 }
                 logger.debug('Successfully fetched job scripts for jobIds: ',
-                jobIds.toString());
+                  jobIds.toString());
                 return done();
               }
             );
