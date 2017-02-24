@@ -44,6 +44,7 @@ describe('Subscriptions Dashboard',
                   assert.equal(err, null);
                   return done();
                 } else {
+                  console.log('projects', projects.length, _.first(projects));
                   projs = projects;
                   logger.debug('Fetched projects By SubscriptionId: '+ subscriptionId);
                   return done();
