@@ -69,16 +69,14 @@ describe('Runs Console',
                           testSuite, err);
                       testCaseErrors.push(testCase);
                       assert.equal(err, null);
-                      return nextJob(err);
+                      return nextJob();
                     } else {
                       return nextJob();
                     }
                   }
                 );
               },
-              function (err) {
-                if (err)
-                  logger.debug('Failed');
+              function () {
                 return done();
               }
             );

@@ -66,27 +66,23 @@ describe('Runs Tests',
               function (jobId, nextJobId) {
                 var query = util.format('jobIds=%s', jobId);
                 shippable.getJobTestReports(query,
-                  function (err, jobTests) {
+                  function (err) {
                     if (err) {
                       failedJobId = jobId;
-                      return nextJobId(err);
+                      isTestFailed = true;
+                      var testCase =
+                        util.format(
+                          '\n - [ ] %s get job test reports failed with error: %s for jobId: %s' +
+                          testSuiteDesc, err, failedJobId);
+                      testCaseErrors.push(testCase);
+                      assert.equal(err, null);
+                      return nextJobId();
                     }
                     return nextJobId();
                   }
                 );
               },
-              function (err) {
-                if (err) {
-                  isTestFailed = true;
-                  var testCase =
-                  util.format(
-                    '\n - [ ] %s get job test reports failed with error: %s for jobId: %s' +
-                    testSuiteDesc, err, failedJobId);
-                  testCaseErrors.push(testCase);
-                  assert.equal(err, null);
-                  return done();
-                }
-                logger.debug('Successfully fetched job test reports for jobIds: ' + jobIds.toString());
+              function () {
                 return done();
               }
             );
