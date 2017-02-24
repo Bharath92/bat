@@ -14,7 +14,7 @@ function setupMS(params) {
   if (_.has(params, 'inputQueue'))
     global.config.inputQueue = params.inputQueue;
 
-  global.config.logLevel = 'debug';
+  global.config.logLevel = 'warn';
 
   require('./logging/logger.js');
   require('./handleErrors/ActErr.js');
