@@ -45,6 +45,7 @@ describe('Subscriptions Dashboard',
                   return done();
                 } else {
                   projs = projects;
+                  console.log("projects::",projects);
                   logger.debug('Fetched projects By SubscriptionId: '+ subscriptionId);
                   return done();
                 }
