@@ -58,6 +58,7 @@ describe('Subscriptions Dashboard',
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
             var query = 'type=ci&isGitTag=false';
+            console.log("subscriptionId::",subscriptionId);
             shippable.getRunStatusBySubscriptionId(subscriptionId, query,
               function (err, runs) {
                 if (err) {
@@ -71,6 +72,7 @@ describe('Subscriptions Dashboard',
                   return done();
                 } else {
                   run = _.first(runs);
+                  console.log("runs::",runs);
                   runId = run.id;
                   logger.debug('Fetched run status By SubscriptionId: '+ subscriptionId);
                   return done();
