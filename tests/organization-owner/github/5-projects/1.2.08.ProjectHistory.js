@@ -182,7 +182,7 @@ describe('Project History',
                 } else {
                   console.log("Trigger new build request run ::",run);
                   logger.debug('Triggered new build with runId: ' + run.runId);
-                  setTimeout(done, 120000);
+                  return done();
                 }
               }
             );

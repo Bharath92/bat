@@ -81,7 +81,7 @@ describe(testSuite,
           }
         );
 
-        /*it('put systemMachineImageId to subscriptions',
+        it('put systemMachineImageId to subscriptions',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
@@ -113,7 +113,7 @@ describe(testSuite,
               }
             );
           }
-        );*/
+        );
 
       }
     );
