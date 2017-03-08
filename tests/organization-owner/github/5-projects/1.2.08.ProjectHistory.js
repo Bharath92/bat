@@ -192,27 +192,15 @@ describe('Project History',
         it('Get Runs',
           function (done) {
             this.timeout(0);
-            var query = util.format('projectIds=%s', projectId);
             var bag = {
               runId : run.runId,
-              status: false
+              isStatusCompleted: false
             };
 
             bag.timeoutLength = 1;
             bag.timeoutLimit = 180;
 
-            async.series([
-                _getRunById.bind(null, bag)
-              ],
-              function (err) {
-                if (err)
-                  logger.error('Failed', err);
-                else
-                  logger.verbose('Successful');
-
-                return done();
-              }
-            );
+            _getRunById(bag, done);
           }
         );
 
@@ -253,7 +241,7 @@ describe('Project History',
   }
 );
 
-function _getRunById (bag, next) {
+function _getRunById (bag, done) {
   shippable.getRunById(bag.runId,
     function(err, run) {
       if (err) {
@@ -262,24 +250,24 @@ function _getRunById (bag, next) {
           util.format(
             '\n- [ ] %s: Get runs, failed with error: %s',
             testSuiteDesc, err);
-        bag.status = true;
+        bag.isStatusCompleted = true;
         testCaseErrors.push(testCase);
         assert.equal(err, null);
-        return next();
+        return done();
       } else {
         if (run.statusCode >= 30 && run.statusCode <= 90 )
-          bag.status = true;
+          bag.isStatusCompleted = true;
 
-        if (!bag.status) {
+        if (!bag.isStatusCompleted) {
           bag.timeoutLength *= 2;
           if (bag.timeoutLength > bag.timeoutLimit)
             bag.timeoutLength = 1;
 
           setTimeout(function () {
-            _getRunById(bag, next);
+            _getRunById(bag, done);
           }, bag.timeoutLength * 1000);
         }
-        return next();
+        return done();
       }
     }
   );
