@@ -189,6 +189,32 @@ describe('Project History',
           }
         );
 
+        it('Get Runs',
+          function (done) {
+            this.timeout(0);
+            var query = util.format('projectIds=%s', projectId);
+            var bag = {
+              query : query,
+              status: false
+            };
+
+            while (!bag.status) {
+              async.series([
+                  _getRuns.bind(null, bag)
+                ],
+                function (err) {
+                  if (err)
+                    logger.error('Failed', err);
+                  else
+                    logger.verbose('Successful');
+                  return done();
+                }
+              );
+            }
+          }
+        );
+
+
       }
     );
 
@@ -224,3 +250,27 @@ describe('Project History',
     );
   }
 );
+
+function _getRuns (bag, next) {
+  shippable.getRuns(bag.query,
+    function(err, runs) {
+      if (err) {
+        isTestFailed = true;
+        var testCase =
+          util.format(
+            '\n- [ ] %s: Get runs, failed with error: %s',
+            testSuiteDesc, err);
+        testCaseErrors.push(testCase);
+        assert.equal(err, null);
+        return next();
+      } else {
+        if (runs.status<200 || runs.status>=299)
+          logger.warn('status is::',runs.status);
+        run = _.first(runs);
+        if (run.statusCode >= 30 && run.statusCode <= 90 )
+          bag.status = true;
+        return next();
+      }
+    }
+  );
+}
