@@ -182,6 +182,7 @@ describe('Project History',
                 } else {
                   console.log("Trigger new build request run ::",run);
                   logger.debug('Triggered new build with runId: ' + run.runId);
+                  runId = run.runId;
                   return done();
                 }
               }
@@ -193,7 +194,7 @@ describe('Project History',
           function (done) {
             this.timeout(0);
             var bag = {
-              runId : run.runId,
+              runId : runId,
               isStatusCompleted: false
             };
 
