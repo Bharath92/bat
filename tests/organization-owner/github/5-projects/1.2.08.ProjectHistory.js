@@ -189,6 +189,22 @@ describe('Project History',
           }
         );
 
+        it('Get Runs',
+          function (done) {
+            this.timeout(0);
+            var bag = {
+              runId : run.runId,
+              isStatusCompleted: false
+            };
+
+            bag.timeoutLength = 1;
+            bag.timeoutLimit = 180;
+
+            _getRunById(bag, done);
+          }
+        );
+
+
       }
     );
 
@@ -224,3 +240,35 @@ describe('Project History',
     );
   }
 );
+
+function _getRunById (bag, done) {
+  shippable.getRunById(bag.runId,
+    function(err, run) {
+      if (err) {
+        isTestFailed = true;
+        var testCase =
+          util.format(
+            '\n- [ ] %s: Get runs, failed with error: %s',
+            testSuiteDesc, err);
+        bag.isStatusCompleted = true;
+        testCaseErrors.push(testCase);
+        assert.equal(err, null);
+        return done();
+      } else {
+        if (run.statusCode >= 30 && run.statusCode <= 90 )
+          bag.isStatusCompleted = true;
+
+        if (!bag.isStatusCompleted) {
+          bag.timeoutLength *= 2;
+          if (bag.timeoutLength > bag.timeoutLimit)
+            bag.timeoutLength = 1;
+
+          setTimeout(function () {
+            _getRunById(bag, done);
+          }, bag.timeoutLength * 1000);
+        }
+        return done();
+      }
+    }
+  );
+}
