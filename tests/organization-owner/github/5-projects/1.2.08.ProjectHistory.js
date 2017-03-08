@@ -194,26 +194,25 @@ describe('Project History',
             this.timeout(0);
             var query = util.format('projectIds=%s', projectId);
             var bag = {
-              query : query,
+              runId : run.runId,
               status: false
             };
 
-            var timer = setInterval(function () {
-              async.series([
-                  _getRuns.bind(null, bag)
-                ],
-                function (err) {
-                  if (err)
-                    logger.error('Failed', err);
-                  else
-                    logger.verbose('Successful');
-                  if (bag.status) {
-                    clearInterval(timer);
-                    return done();
-                  }
-                }
-              );
-            }, 120000);
+            bag.timeoutLength = 1;
+            bag.timeoutLimit = 180;
+
+            async.series([
+                _getRunById.bind(null, bag)
+              ],
+              function (err) {
+                if (err)
+                  logger.error('Failed', err);
+                else
+                  logger.verbose('Successful');
+
+                return done();
+              }
+            );
           }
         );
 
@@ -254,9 +253,9 @@ describe('Project History',
   }
 );
 
-function _getRuns (bag, next) {
-  shippable.getRuns(bag.query,
-    function(err, runs) {
+function _getRunById (bag, next) {
+  shippable.getRunById(bag.runId,
+    function(err, run) {
       if (err) {
         isTestFailed = true;
         var testCase =
@@ -268,11 +267,18 @@ function _getRuns (bag, next) {
         assert.equal(err, null);
         return next();
       } else {
-        if (runs.status<200 || runs.status>=299)
-          logger.warn('status is::',runs.status);
-        run = _.first(runs);
         if (run.statusCode >= 30 && run.statusCode <= 90 )
           bag.status = true;
+
+        if (!bag.status) {
+          bag.timeoutLength *= 2;
+          if (bag.timeoutLength > bag.timeoutLimit)
+            bag.timeoutLength = 1;
+
+          setTimeout(function () {
+            _getRunById(bag, next);
+          }, bag.timeoutLength * 1000);
+        }
         return next();
       }
     }
