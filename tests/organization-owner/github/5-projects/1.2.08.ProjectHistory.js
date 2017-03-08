@@ -198,7 +198,7 @@ describe('Project History',
               status: false
             };
 
-            while (!bag.status) {
+            var timer = setInterval(function () {
               async.series([
                   _getRuns.bind(null, bag)
                 ],
@@ -207,10 +207,13 @@ describe('Project History',
                     logger.error('Failed', err);
                   else
                     logger.verbose('Successful');
-                  return done();
+                  if (bag.status) {
+                    clearInterval(timer);
+                    return done();
+                  }
                 }
               );
-            }
+            }, 120000);
           }
         );
 
@@ -260,6 +263,7 @@ function _getRuns (bag, next) {
           util.format(
             '\n- [ ] %s: Get runs, failed with error: %s',
             testSuiteDesc, err);
+        bag.status = true;
         testCaseErrors.push(testCase);
         assert.equal(err, null);
         return next();
