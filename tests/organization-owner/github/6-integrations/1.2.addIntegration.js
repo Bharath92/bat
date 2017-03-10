@@ -233,7 +233,7 @@ describe('Add Integrations',
               "formJSONValues": [
                 {
                   "label": "url",
-                  "value": "url"
+                  "value": "https://example.com/"
                 },
                 {
                   "label": "username",
@@ -323,7 +323,7 @@ describe('Add Integrations',
                 },
                 {
                   "label": "url",
-                  "value": "url"
+                  "value": "https://example.com/"
                 },
                 {
                   "label": "username",
@@ -433,7 +433,7 @@ describe('Add Integrations',
                 },
                 {
                   "label": "webhookURL",
-                  "value": "url"
+                  "value": "https://example.com/"
                 }
               ]
             };
@@ -519,7 +519,7 @@ describe('Add Integrations',
                 },
                 {
                   "label": "url",
-                  "value": "url"
+                  "value": "https://example.com/"
                 }
               ]
             };
@@ -605,7 +605,7 @@ describe('Add Integrations',
                 },
                 {
                   "label": "url",
-                  "value": "this-is-url"
+                  "value": "https://example.com/"
                 },
                 {
                   "label": "username",
@@ -668,7 +668,7 @@ describe('Add Integrations',
                 },
                 {
                   "label": "webhookURL",
-                  "value": "test"
+                  "value": "https://example.com/"
                 }
               ]
             };
@@ -904,7 +904,7 @@ describe('Add Integrations',
                 },
                 {
                   "label": "url",
-                  "value": "test"
+                  "value": "https://example.com/"
                 }
               ]
             };
@@ -1055,7 +1055,7 @@ describe('Add Integrations',
                 },
                 {
                   "label": "url",
-                  "value": "quay.io"
+                  "value": "http://quay.io"
                 },
                 {
                   "label": "username",
