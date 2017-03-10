@@ -155,7 +155,7 @@ describe(testSuite,
             var shippable = new Shippable(config.apiToken);
 
             var body = _.findWhere(accountIntegrations, {name:"OrgOwner-acs"});
-            __setFormJSONValue(body.formJSONValues, 'url', 'key');
+            __setFormJSONValue(body.formJSONValues, 'url', 'https://example1.com/');
 
             body.isValid = true;
 
@@ -186,7 +186,7 @@ describe(testSuite,
 
             var body = _.findWhere(accountIntegrations,
                          {name:"OrgOwner-bitbucket"});
-            __setFormJSONValue(body.formJSONValues, 'url', 'key');
+            __setFormJSONValue(body.formJSONValues, 'url', 'https://example1.com/');
 
             body.isValid = true;
 
@@ -217,7 +217,7 @@ describe(testSuite,
 
             var body = _.findWhere(accountIntegrations,
                          {name:"OrgOwner-ddc"});
-            __setFormJSONValue(body.formJSONValues, 'url', 'key');
+            __setFormJSONValue(body.formJSONValues, 'url', 'https://example1.com/');
 
             body.isValid = true;
 
@@ -403,7 +403,7 @@ describe(testSuite,
 
             var body = _.findWhere(accountIntegrations,
                          {name:"OrgOwner-private-docker-registry"});
-            __setFormJSONValue(body.formJSONValues, 'url', 'test');
+            __setFormJSONValue(body.formJSONValues, 'url', 'https://example1.com/');
 
             body.isValid = true;
 
@@ -495,7 +495,7 @@ describe(testSuite,
 
             var body = _.findWhere(accountIntegrations,
                          {name:"OrgOwner-AWS_IAM"});
-            __setFormJSONValue(body.formJSONValues, 'url', 'test');
+            __setFormJSONValue(body.formJSONValues, 'url', 'https://example1.com/');
 
             body.isValid = true;
 
@@ -526,7 +526,7 @@ describe(testSuite,
 
             var body = _.findWhere(accountIntegrations,
                          {name:"OrgOwner-Docker_Cloud"});
-            __setFormJSONValue(body.formJSONValues, 'url', 'test');
+            __setFormJSONValue(body.formJSONValues, 'url', 'https://example1.com/');
 
             body.isValid = true;
 
@@ -557,7 +557,7 @@ describe(testSuite,
 
             var body = _.findWhere(accountIntegrations,
                          {name:"OrgOwner-Docker_trusted_registry"});
-            __setFormJSONValue(body.formJSONValues, 'url', 'test');
+            __setFormJSONValue(body.formJSONValues, 'url', 'https://example1.com/');
 
             body.isValid = true;
 
@@ -587,7 +587,7 @@ describe(testSuite,
 
             var body = _.findWhere(accountIntegrations,
                          {name:"OrgOwner-Github-Enterprise"});
-            __setFormJSONValue(body.formJSONValues, 'url', 'testing');
+            __setFormJSONValue(body.formJSONValues, 'url', 'https://example1.com/');
 
             body.isValid = true;
 
@@ -618,7 +618,7 @@ describe(testSuite,
 
             var body = _.findWhere(accountIntegrations,
                          {name:"OrgOwner-Joyent-Triton-Public-Cloud"});
-            __setFormJSONValue(body.formJSONValues, 'url', 'testing');
+            __setFormJSONValue(body.formJSONValues, 'url', 'https://example1.com/');
 
             body.isValid = true;
 
@@ -679,7 +679,7 @@ describe(testSuite,
 
             var body = _.findWhere(accountIntegrations,
                          {name:"OrgOwner-Quay.io"});
-            __setFormJSONValue(body.formJSONValues, 'url', 'testing');
+            __setFormJSONValue(body.formJSONValues, 'url', 'https://example1.com/');
 
             body.isValid = true;
 
