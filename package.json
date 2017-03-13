@@ -59,7 +59,8 @@
     "maxstatements": 20,
     "mocha": true,
     "predef": [
-      "logger"
+      "logger",
+      "util"
     ]
   },
   "devDependencies": {

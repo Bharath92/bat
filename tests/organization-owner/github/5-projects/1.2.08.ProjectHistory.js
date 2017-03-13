@@ -180,11 +180,33 @@ describe('Project History',
                   assert.equal(err, null);
                   return done();
                 } else {
-                  console.log("Trigger new build request run ::",run);
                   logger.debug('Triggered new build with runId: ' + run.runId);
                   runId = run.runId;
                   return done();
                 }
+              }
+            );
+          }
+        );
+
+        it('Get JobStatesMap',
+          function (done) {
+            this.timeout(0);
+
+            var query = util.format('projectIds=%s', projectId);
+            shippable.getJobStateMaps(query,
+              function (err) {
+                if (err) {
+                  isTestFailed = true;
+                  var testCase =
+                    util.format(
+                      '\n - [ ] %s Get JobStatesMap for projectId:' +
+                      ' %s failed with error: %s', testSuiteDesc, projectId,
+                      err);
+                  testCaseErrors.push(testCase);
+                  assert.equal(err, null);
+                }
+                return done();
               }
             );
           }
