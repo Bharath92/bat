@@ -205,10 +205,8 @@ describe('Project History',
                       err);
                   testCaseErrors.push(testCase);
                   assert.equal(err, null);
-                  return done();
-                } else {
-                  return done();
                 }
+                return done();
               }
             );
           }
