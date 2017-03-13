@@ -159,6 +159,14 @@ ShippableAdapter.prototype.getBuildJobs =
     );
   };
 
+ShippableAdapter.prototype.getBuilds =
+  function (query, callback) {
+    this.get(
+      util.format('/builds?%s', query),
+      callback
+    );
+  };
+
 ShippableAdapter.prototype.getClusterNodes =
   function (query, callback) {
     this.get(
@@ -742,10 +750,10 @@ ShippableAdapter.prototype.resetProjectById =
     );
   };
 
-ShippableAdapter.prototype.postResource =
+ShippableAdapter.prototype.postNewSyncRepo =
   function (json, callback) {
     this.post(
-      '/resources',
+      '/resources/syncRepo',
       json,
       callback
     );
