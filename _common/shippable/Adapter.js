@@ -310,6 +310,14 @@ ShippableAdapter.prototype.getRuns =
     );
   };
 
+ShippableAdapter.prototype.getJobStateMaps =
+  function (query, callback) {
+    this.get(
+      util.format('/jobStatesMap?%s', query),
+      callback
+    );
+  };
+
 ShippableAdapter.prototype.deleteRunById =
   function (runId, callback) {
     this.delete(
