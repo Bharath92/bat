@@ -193,10 +193,9 @@ describe('Project History',
           function (done) {
             this.timeout(0);
 
-            var query = util.format('projectIds=%s',
-              projectId);
+            var query = util.format('projectIds=%s', projectId);
             shippable.getJobStateMaps(query,
-              function (err, jobStatesMaps) {
+              function (err) {
                 if (err) {
                   isTestFailed = true;
                   var testCase =
