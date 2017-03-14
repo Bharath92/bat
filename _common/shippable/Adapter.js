@@ -159,6 +159,14 @@ ShippableAdapter.prototype.getBuildJobs =
     );
   };
 
+ShippableAdapter.prototype.getBuildJobConsolesByBuildJobId =
+  function (buildJobId, callback) {
+    this.get(
+      util.format('/buildJobs/%s/consoles', buildJobId),
+      callback
+    );
+  };
+
 ShippableAdapter.prototype.getBuilds =
   function (query, callback) {
     this.get(
