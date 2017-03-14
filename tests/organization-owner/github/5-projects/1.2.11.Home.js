@@ -75,7 +75,7 @@ describe('Home Dashboard',
                   isTestFailed = true;
                   var testCase =
                     util.format(
-                      '\n - [ ] %s get projects failed with error: %s' +
+                      '\n - [ ] %s get projects failed with error: %s',
                       testSuiteDesc, err);
                   testCaseErrors.push(testCase);
                   assert.equal(err, null);

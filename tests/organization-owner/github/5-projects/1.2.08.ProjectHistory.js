@@ -290,7 +290,8 @@ function _getRunById (bag, done) {
             _getRunById(bag, done);
           }, bag.timeoutLength * 1000);
         }
-        return done();
+        if (bag.isStatusCompleted)
+          return done();
       }
     }
   );

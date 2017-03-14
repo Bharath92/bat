@@ -38,8 +38,9 @@ describe('Subscriptions Dashboard',
                   isTestFailed = true;
                   var testCase =
                     util.format(
-                      '\n - [ ] %s get projects failed with error: %s for subscriptionId: %s' +
-                      testSuiteDesc, err, subscriptionId);
+                      '\n - [ ] %s get projects failed with error: ' +
+                      '%s for subscriptionId: %s', testSuiteDesc,
+                      err, subscriptionId);
                   testCaseErrors.push(testCase);
                   assert.equal(err, null);
                   return done();
