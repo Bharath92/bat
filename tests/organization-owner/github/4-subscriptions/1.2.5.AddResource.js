@@ -127,6 +127,28 @@ describe(testSuite,
     describe('Create New Resource',
       function () {
 
+        it('Get SubscriptionIntegrations',
+          function (done) {
+            this.timeout(0);
+
+            var query = util.format('subscriptionIds=%s',subscriptionId);
+            shippable.getSubscriptionIntegrations(query,
+              function (err) {
+                if (err) {
+                  isTestFailed = true;
+                  var testCase =
+                    util.format(
+                      '\n - [ ] %s get SubscriptionIntegrations' +
+                      ' failed with error: %s', testSuiteDesc, err);
+                  testCaseErrors.push(testCase);
+                  assert.equal(err, null);
+                }
+                return done();
+              }
+            );
+          }
+        );
+
         it('Get Projects',
           function (done) {
             this.timeout(0);
@@ -138,7 +160,7 @@ describe(testSuite,
                   isTestFailed = true;
                   var testCase =
                     util.format(
-                      '\n - [ ] %s get projects failed with error: %s' +
+                      '\n - [ ] %s get projects failed with error: %s',
                       testSuiteDesc, err);
                   testCaseErrors.push(testCase);
                   assert.equal(err, null);
@@ -146,6 +168,52 @@ describe(testSuite,
                 } else {
                   var project = {};
                   project = _.findWhere(projects, {isPrivateRepository: false});
+                  projectId = project.id;
+                  return done();
+                }
+              }
+            );
+          }
+        );
+
+        it('Get Project Resources',
+          function (done) {
+            this.timeout(0);
+
+            var query = util.format('projectIds=%s&typeCodes=1014',projectId);
+            shippable.getResources(query,
+              function (err) {
+                if (err) {
+                  isTestFailed = true;
+                  var testCase =
+                    util.format(
+                      '\n - [ ] %s getResources failed with error: %s',
+                      testSuiteDesc, err);
+                  testCaseErrors.push(testCase);
+                  assert.equal(err, null);
+                }
+                return done();
+              }
+            );
+          }
+        );
+
+        it('Get ProjectById',
+          function (done) {
+            this.timeout(0);
+            var query = 'forceSync=true';
+            shippable.getProjectByIdWithQuery(projectId, query,
+              function (err, project) {
+                if (err) {
+                  isTestFailed = true;
+                  var testCase =
+                    util.format(
+                      '\n - [ ] %s get projects failed with error: %s',
+                      testSuiteDesc, err);
+                  testCaseErrors.push(testCase);
+                  assert.equal(err, null);
+                  return done();
+                } else {
                   projectId = project.id;
                   projectName = project.name;
                   return done();
@@ -181,18 +249,12 @@ describe(testSuite,
                   return done();
                 } else {
                   logger.debug('Added resource');
-                  setTimeout(done,120000);
+                  return done();
                 }
               }
             );
           }
         );
-
-      }
-    );
-
-    describe('Delete Resource',
-      function () {
 
         it('get resources',
           function (done) {
@@ -211,73 +273,7 @@ describe(testSuite,
                   assert.equal(err, null);
                   return done();
                 } else {
-                  syncRepoResourceId = _.findWhere(res, {"typeCode":1014}).id;
-                  rSyncResourceId = _.findWhere(res, {"typeCode":2009}).id;
-                  return done();
-                }
-              }
-            );
-          }
-        );
-
-        it('Get Builds',
-          function (done) {
-            this.timeout(0);
-            var bag = {
-              resourceId : rSyncResourceId,
-              isStatusCompleted: false
-            };
-
-            bag.timeoutLength = 1;
-            bag.timeoutLimit = 180;
-
-            _getBuildByResourceId(bag, done);
-          }
-        );
-
-        it('soft delete resource',
-          function (done) {
-            this.timeout(0);
-
-            var query = '';
-            shippable.deleteResourceById(syncRepoResourceId, query,
-              function(err) {
-                if (err) {
-                  isTestFailed = true;
-                  var testCase =
-                    util.format(
-                      '\n- [ ] %s: deleteResourceById failed with error: %s',
-                      testSuiteDesc, err);
-                  testCaseErrors.push(testCase);
-                  assert.equal(err, null);
-                  return done();
-                } else {
-                  logger.debug("Soft Deleted Resource");
-                  return done();
-                }
-              }
-            );
-          }
-        );
-
-        it('hard delete resource',
-          function (done) {
-            this.timeout(0);
-
-            var query = 'hard=true';
-            shippable.deleteResourceById(syncRepoResourceId, query,
-              function(err) {
-                if (err) {
-                  isTestFailed = true;
-                  var testCase =
-                    util.format(
-                      '\n- [ ] %s: deleteResourceById failed with error: %s',
-                      testSuiteDesc, err);
-                  testCaseErrors.push(testCase);
-                  assert.equal(err, null);
-                  return done();
-                } else {
-                  logger.debug("Hard Deleted Resource");
+                  logger.debug("Successfully Got Resources");
                   return done();
                 }
               }
@@ -288,42 +284,37 @@ describe(testSuite,
       }
     );
 
+    describe('Should run after above test suites',
+      function () {
+
+        it('Creating Github Issue if test cases failed',
+          function (done) {
+            this.timeout(0);
+            if (isTestFailed) {
+              var githubAdapter =
+                new adapter(config.githubToken, config.githubUrl);
+              var title = util.format('Failed test suite %s', testSuite);
+              var body = util.format(
+                'Failed test cases are:\n%s',testCaseErrors);
+              var data = {
+                title: title,
+                body: body
+              };
+              githubAdapter.pushRespositoryIssue('deepikasl', 'VT1', data,
+                function(err, res) {
+                  if (err)
+                    logger.warn("Creating Issue failed with error: ", err);
+                  return done();
+                }
+              );
+            } else {
+              return done();
+            }
+          }
+        );
+
+      }
+    );
+
   }
 );
-
-function _getBuildByResourceId (bag, done) {
-  var query = util.format('resourceIds=%s',bag.resourceId);
-
-  shippable.getBuilds(query,
-    function(err, builds) {
-      if (err) {
-        isTestFailed = true;
-        var testCase =
-          util.format(
-            '\n- [ ] %s: Get builds, failed with error: %s',
-            testSuiteDesc, err);
-        bag.isStatusCompleted = true;
-        testCaseErrors.push(testCase);
-        assert.equal(err, null);
-        return done();
-      } else {
-        if (!_.isEmpty(builds)) {
-          var build = _.first(builds);
-          if (build.statusCode === 4002 || build.statusCode === 4003 )
-            bag.isStatusCompleted = true;
-        }
-
-        if (!bag.isStatusCompleted) {
-          bag.timeoutLength *= 2;
-          if (bag.timeoutLength > bag.timeoutLimit)
-            bag.timeoutLength = 1;
-
-          setTimeout(function () {
-            _getBuildByResourceId(bag, done);
-          }, bag.timeoutLength * 1000);
-        }
-        return done();
-      }
-    }
-  );
-}
