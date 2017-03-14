@@ -35,7 +35,7 @@ describe(testSuite,
         it('Organization-Owner-github-getSubscription',
           function (done) {
             this.timeout(0);
-            var shippable = new Shippable(config.apiToken);
+            shippable = new Shippable(config.apiToken);
             var query = util.format('orgNames=%s',nconf.get("GITHUB_ORG_1"));
             shippable.getSubscriptions(query,
               function(err, subscriptions) {
@@ -62,7 +62,6 @@ describe(testSuite,
         it('Get github AccountIntegartion',
           function (done) {
             this.timeout(0);
-            shippable = new Shippable(config.apiToken);
 
             var query = util.format('names=%s', 'github');
             shippable.getAccountIntegrations('',
