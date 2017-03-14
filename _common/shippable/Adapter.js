@@ -167,6 +167,31 @@ ShippableAdapter.prototype.getBuilds =
     );
   };
 
+ShippableAdapter.prototype.getBuildById =
+  function (buildId, callback) {
+    this.get(
+      util.format('/builds/%s', buildId),
+      callback
+    );
+  };
+
+ShippableAdapter.prototype.getBuildStatusBySubscriptionId =
+  function (subId, query, callback) {
+    this.get(
+      util.format('/subscriptions/%s/buildStatus?%s', subId, query),
+      callback
+    );
+  };
+
+ShippableAdapter.prototype.triggerNewBuildByResourceId =
+  function (resourceId, callback) {
+    this.post(
+      util.format('/resources/%s/triggerNewBuildRequest', resourceId),
+      {},
+      callback
+    );
+  };
+
 ShippableAdapter.prototype.getClusterNodes =
   function (query, callback) {
     this.get(
