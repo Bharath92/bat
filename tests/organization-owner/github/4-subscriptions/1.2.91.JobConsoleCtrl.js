@@ -6,28 +6,32 @@ var chai = require('chai');
 var _ = require('underscore');
 var assert = chai.assert;
 var testSuiteNum = '1.';
-var testSuiteDesc = 'Enable Project';
+var testSuiteDesc = 'Job Console';
 var adapter = require('../../../../_common/shippable/github/Adapter.js');
 var Shippable = require('../../../../_common/shippable/Adapter.js');
 
 var testSuite = util.format('%s2 - %s', testSuiteNum,
-  testSuiteDesc);
+                  testSuiteDesc);
 
 var isTestFailed = false;
 var testCaseErrors = [];
+var shippable = '';
+var resource = {};
 var subscriptionId = '';
-var projectId = '';
+var jobsVm = [];
+var buildId = '';
+var resourceId = '';
+var buildJobId = '';
 
-describe('Enable Project',
-  function() {
+describe(testSuite,
+  function () {
 
-    describe(testSuite,
+    describe('Job Consoles Controller',
       function () {
-
         it('Organization-Owner-github-getSubscription',
           function (done) {
             this.timeout(0);
-            var shippable = new Shippable(config.apiToken);
+            shippable = new Shippable(config.apiToken);
             var query = util.format('orgNames=%s',nconf.get("GITHUB_ORG_1"));
             shippable.getSubscriptions(query,
               function(err, subscriptions) {
@@ -44,75 +48,107 @@ describe('Enable Project',
                   if (subscriptions.status<200 || subscriptions.status>=299)
                     logger.warn("status is::",subscriptions.status);
                   subscriptionId = _.first(subscriptions).id;
-                  nconf.set('shiptest-GITHUB_ORG_1:subscriptionId', subscriptionId);
-                  nconf.save(function (err) {
-                    if (err)
-                      logger.debug("Failed");
-                    return done();
-                  });
+                  return done();
                 }
               }
             );
           }
         );
 
-        it('Get Projects',
+        it('get resources',
           function (done) {
             this.timeout(0);
-            var shippable = new Shippable(config.apiToken);
 
-            var query = util.format('subscriptionIds=%s',subscriptionId);
-            shippable.getProjects(query,
-              function (err, projects) {
+            var query = util.format('isDeleted=false&subscriptionIds=%s',
+              subscriptionId);
+            shippable.getResources(query,
+              function(err, resources) {
                 if (err) {
                   isTestFailed = true;
                   var testCase =
                     util.format(
-                      '\n - [ ] %s get projects failed with error: %s',
+                      '\n- [ ] %s: Get resources failed with error: %s',
                       testSuiteDesc, err);
                   testCaseErrors.push(testCase);
                   assert.equal(err, null);
                   return done();
                 } else {
-                  var project = {};
-                  project = _.findWhere(projects, {isPrivateRepository: false});
-                  projectId = project.id;
-                  nconf.set('shiptest-GITHUB_ORG_1:projectId',projectId);
-                  nconf.save(function (err) {
-                    if (err)
-                      logger.debug("Failed");
-                    return done();
-                  });
+                  jobsVm = _.where(resources, {"isJob": true});
+                  return done();
                 }
               }
             );
           }
         );
 
-        it('Enable Project',
+        it('get Builds By resourceId',
           function (done) {
             this.timeout(0);
-            var shippable = new Shippable(config.apiToken);
 
-            var body = {
-              projectId: projectId,
-              type: 'ci'
-            };
-            shippable.enableProjectById(projectId, body,
-              function (err) {
+            resourceId = _.first(jobsVm).id;
+            var query = util.format('resourceIds=%s', resourceId);
+            shippable.getBuilds(query,
+              function(err, builds) {
                 if (err) {
                   isTestFailed = true;
                   var testCase =
                     util.format(
-                      '\n - [ ] %s Enable project id: %s failed with error: %s' +
-                      testSuiteDesc, projectId, err);
+                      '\n- [ ] %s: getBuilds failed with error: %s',
+                      testSuiteDesc, err);
                   testCaseErrors.push(testCase);
                   assert.equal(err, null);
                   return done();
                 } else {
-                  logger.debug("Enabled");
+                  buildId = _.first(builds).id;
                   return done();
                 }
+              }
+            );
+          }
+        );
+
+        it('get BuildJobs',
+          function (done) {
+            this.timeout(0);
+
+            var query = util.format('buildIds=%s', buildId);
+            shippable.getBuildJobs(query,
+              function(err, buildJobs) {
+                if (err) {
+                  isTestFailed = true;
+                  var testCase =
+                    util.format(
+                      '\n- [ ] %s: getBuildJobs failed with error: %s',
+                      testSuiteDesc, err);
+                  testCaseErrors.push(testCase);
+                  assert.equal(err, null);
+                  return done();
+                } else {
+                  buildJobId = _.first(buildJobs).id;
+                  return done();
+                }
+              }
+            );
+          }
+        );
+
+        it('get BuildJobConsoles By BuildJobId',
+          function (done) {
+            this.timeout(0);
+
+            var query = util.format('buildIds=%s', buildId);
+            shippable.getBuildJobConsolesByBuildJobId(buildJobId,
+              function(err) {
+                if (err) {
+                  isTestFailed = true;
+                  var testCase =
+                    util.format(
+                      '\n- [ ] %s: getBuildJobConsolesByBuildJobId failed' +
+                      'with error: %s', testSuiteDesc, err);
+                  testCaseErrors.push(testCase);
+                  assert.equal(err, null);
+                }
+                return done();
               }
             );
           }
@@ -152,5 +188,6 @@ describe('Enable Project',
 
       }
     );
+
   }
 );

@@ -6,113 +6,97 @@ var chai = require('chai');
 var _ = require('underscore');
 var assert = chai.assert;
 var testSuiteNum = '1.';
-var testSuiteDesc = 'Enable Project';
+var testSuiteDesc = 'Params Modal';
 var adapter = require('../../../../_common/shippable/github/Adapter.js');
 var Shippable = require('../../../../_common/shippable/Adapter.js');
 
 var testSuite = util.format('%s2 - %s', testSuiteNum,
-  testSuiteDesc);
+                  testSuiteDesc);
 
 var isTestFailed = false;
 var testCaseErrors = [];
-var subscriptionId = '';
-var projectId = '';
+var shippable = '';
+var resource = {};
 
-describe('Enable Project',
-  function() {
+describe(testSuite,
+  function () {
 
-    describe(testSuite,
+    describe('Resource Modal Controller',
       function () {
-
-        it('Organization-Owner-github-getSubscription',
+        it('get syncRepo resource',
           function (done) {
             this.timeout(0);
-            var shippable = new Shippable(config.apiToken);
-            var query = util.format('orgNames=%s',nconf.get("GITHUB_ORG_1"));
-            shippable.getSubscriptions(query,
-              function(err, subscriptions) {
+
+            shippable = new Shippable(config.apiToken);
+            var query = 'typeCodes=1014';
+            shippable.getResources(query,
+              function(err,res) {
                 if (err) {
                   isTestFailed = true;
                   var testCase =
                     util.format(
-                      '\n- [ ] %s: Get subscriptions, failed with error: %s',
+                      '\n- [ ] %s: Get resources failed with error: %s',
                       testSuiteDesc, err);
                   testCaseErrors.push(testCase);
                   assert.equal(err, null);
                   return done();
                 } else {
-                  if (subscriptions.status<200 || subscriptions.status>=299)
-                    logger.warn("status is::",subscriptions.status);
-                  subscriptionId = _.first(subscriptions).id;
-                  nconf.set('shiptest-GITHUB_ORG_1:subscriptionId', subscriptionId);
-                  nconf.save(function (err) {
-                    if (err)
-                      logger.debug("Failed");
-                    return done();
-                  });
+                  resource = _.first(res);
+                  return done();
                 }
               }
             );
           }
         );
 
-        it('Get Projects',
+        it('Get Versions By ResourceId',
           function (done) {
             this.timeout(0);
-            var shippable = new Shippable(config.apiToken);
 
-            var query = util.format('subscriptionIds=%s',subscriptionId);
-            shippable.getProjects(query,
-              function (err, projects) {
-                if (err) {
-                  isTestFailed = true;
-                  var testCase =
-                    util.format(
-                      '\n - [ ] %s get projects failed with error: %s',
-                      testSuiteDesc, err);
-                  testCaseErrors.push(testCase);
-                  assert.equal(err, null);
-                  return done();
-                } else {
-                  var project = {};
-                  project = _.findWhere(projects, {isPrivateRepository: false});
-                  projectId = project.id;
-                  nconf.set('shiptest-GITHUB_ORG_1:projectId',projectId);
-                  nconf.save(function (err) {
-                    if (err)
-                      logger.debug("Failed");
-                    return done();
-                  });
-                }
-              }
-            );
-          }
-        );
+            var query = util.format(
+              'resourceIds=%s&subscriptionIds=%s&sortBy=id&limit=1', resource.id,
+              resource.subscriptionId);
 
-        it('Enable Project',
-          function (done) {
-            this.timeout(0);
-            var shippable = new Shippable(config.apiToken);
-
-            var body = {
-              projectId: projectId,
-              type: 'ci'
-            };
-            shippable.enableProjectById(projectId, body,
+            shippable.getVersions(query,
               function (err) {
                 if (err) {
                   isTestFailed = true;
                   var testCase =
                     util.format(
-                      '\n - [ ] %s Enable project id: %s failed with error: %s' +
-                      testSuiteDesc, projectId, err);
+                      '\n - [ ] %s get Versions failed with error: %s',
+                      testSuiteDesc, err);
                   testCaseErrors.push(testCase);
                   assert.equal(err, null);
-                  return done();
-                } else {
-                  logger.debug("Enabled");
-                  return done();
                 }
+                return done();
+              }
+            );
+          }
+        );
+
+        it('post Version',
+          function (done) {
+            this.timeout(0);
+
+            var newVersion = {
+              resourceId: resource.id,
+              projectId: resource.projectId,
+              versionTrigger: true,
+              propertyBag: {}
+            };
+
+            shippable.postVersion(newVersion,
+              function (err) {
+                if (err) {
+                  isTestFailed = true;
+                  var testCase =
+                    util.format(
+                      '\n - [ ] %s postVersion failed with error: %s',
+                      testSuiteDesc, err);
+                  testCaseErrors.push(testCase);
+                  assert.equal(err, null);
+                }
+                return done();
               }
             );
           }
@@ -152,5 +136,6 @@ describe('Enable Project',
 
       }
     );
+
   }
 );

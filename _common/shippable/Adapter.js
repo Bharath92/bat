@@ -159,6 +159,47 @@ ShippableAdapter.prototype.getBuildJobs =
     );
   };
 
+ShippableAdapter.prototype.getBuildJobConsolesByBuildJobId =
+  function (buildJobId, callback) {
+    this.get(
+      util.format('/buildJobs/%s/consoles', buildJobId),
+      callback
+    );
+  };
+
+ShippableAdapter.prototype.getBuilds =
+  function (query, callback) {
+    this.get(
+      util.format('/builds?%s', query),
+      callback
+    );
+  };
+
+ShippableAdapter.prototype.getBuildById =
+  function (buildId, callback) {
+    this.get(
+      util.format('/builds/%s', buildId),
+      callback
+    );
+  };
+
+ShippableAdapter.prototype.getBuildStatusBySubscriptionId =
+  function (subId, query, callback) {
+    this.get(
+      util.format('/subscriptions/%s/buildStatus?%s', subId, query),
+      callback
+    );
+  };
+
+ShippableAdapter.prototype.triggerNewBuildByResourceId =
+  function (resourceId, callback) {
+    this.post(
+      util.format('/resources/%s/triggerNewBuildRequest', resourceId),
+      {},
+      callback
+    );
+  };
+
 ShippableAdapter.prototype.getClusterNodes =
   function (query, callback) {
     this.get(
@@ -250,6 +291,14 @@ ShippableAdapter.prototype.getProjectById =
   function (id, callback) {
     this.get(
       util.format('/projects/%s', id),
+      callback
+    );
+  };
+
+ShippableAdapter.prototype.getProjectByIdWithQuery =
+  function (id, query, callback) {
+    this.get(
+      util.format('/projects/%s?%s', id, query),
       callback
     );
   };
@@ -742,10 +791,10 @@ ShippableAdapter.prototype.resetProjectById =
     );
   };
 
-ShippableAdapter.prototype.postResource =
+ShippableAdapter.prototype.postNewSyncRepo =
   function (json, callback) {
     this.post(
-      '/resources',
+      '/resources/syncRepo',
       json,
       callback
     );
