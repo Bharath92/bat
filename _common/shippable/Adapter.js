@@ -117,6 +117,18 @@ ShippableAdapter.prototype.getAccountTokens =
     );
   };
 
+ShippableAdapter.prototype.getCoverageReports =
+  function (query, callback) {
+    var url = '/jobCoverageReports?' + query;
+    this.get(url, callback);
+  };
+
+ShippableAdapter.prototype.getReportsByJobId =
+  function (jobId, callback) {
+    var url = '/passthrough/jobs/' + jobId + '/reports';
+    this.get(url, callback);
+  };
+
 ShippableAdapter.prototype.postAccountProfile =
   function (json, callback) {
     this.post(
