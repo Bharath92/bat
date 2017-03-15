@@ -29,9 +29,6 @@ describe('Project RunsConfig',
         it('Get ProjectOwnerAccounts',
           function (done) {
             this.timeout(0);
-            var pathToJson = process.cwd() + '/config.json';
-            nconf.argv().env().file({file: pathToJson});
-            nconf.load();
             projectId = nconf.get('shiptest-GITHUB_ORG_1:projectId');
             shippable = new Shippable(config.apiToken);
             shippable.getProjectOwnerAccounts(projectId,
@@ -57,9 +54,6 @@ describe('Project RunsConfig',
         it('Set OwnerAccountIdWorkflow',
           function (done) {
             this.timeout(0);
-            var pathToJson = process.cwd() + '/config.json';
-            nconf.argv().env().file({file: pathToJson});
-            nconf.load();
             projectId = nconf.get('shiptest-GITHUB_ORG_1:projectId');
             accountId = nconf.get('shiptest-github-owner:accountId');
             var update = {
@@ -89,9 +83,6 @@ describe('Project RunsConfig',
         it('Automate Low Coverage Alert for value 10',
           function (done) {
             this.timeout(0);
-            var pathToJson = process.cwd() + '/config.json';
-            nconf.argv().env().file({file: pathToJson});
-            nconf.load();
             projectId = nconf.get('shiptest-GITHUB_ORG_1:projectId');
             var update = {
               propertyBag: {
@@ -209,9 +200,6 @@ describe('Project RunsConfig',
         it('Custom Timeout for valid value 10 mins (600000 ms)',
           function (done) {
             this.timeout(0);
-            var pathToJson = process.cwd() + '/config.json';
-            nconf.argv().env().file({file: pathToJson});
-            nconf.load();
             projectId = nconf.get("shiptest-GITHUB_ORG_1:projectId");
             var update = {
               propertyBag: {
@@ -356,9 +344,6 @@ describe('Project RunsConfig',
         it('Disable Run Parallel Jobs',
           function (done) {
             this.timeout(0);
-            var pathToJson = process.cwd() + '/config.json';
-            nconf.argv().env().file({file: pathToJson});
-            nconf.load();
             projectId = nconf.get('shiptest-GITHUB_ORG_1:projectId');
             var update = {
               propertyBag: {
@@ -415,9 +400,6 @@ describe('Project RunsConfig',
         it('Enable Consolidate Reports',
           function (done) {
             this.timeout(0);
-            var pathToJson = process.cwd() + '/config.json';
-            nconf.argv().env().file({file: pathToJson});
-            nconf.load();
             projectId = nconf.get('shiptest-GITHUB_ORG_1:projectId');
             var update = {
               consolidateReports: true
@@ -471,9 +453,6 @@ describe('Project RunsConfig',
         it('Enable PullRequestBuilds',
           function (done) {
             this.timeout(0);
-            var pathToJson = process.cwd() + '/config.json';
-            nconf.argv().env().file({file: pathToJson});
-            nconf.load();
             projectId = nconf.get('shiptest-GITHUB_ORG_1:projectId');
             var update = {
               propertyBag: {
@@ -530,9 +509,6 @@ describe('Project RunsConfig',
         it('Enable CommitBuilds',
           function (done) {
             this.timeout(0);
-            var pathToJson = process.cwd() + '/config.json';
-            nconf.argv().env().file({file: pathToJson});
-            nconf.load();
             projectId = nconf.get('shiptest-GITHUB_ORG_1:projectId');
             var update = {
               propertyBag: {
@@ -589,9 +565,6 @@ describe('Project RunsConfig',
         it('Enable TagBuilds',
           function (done) {
             this.timeout(0);
-            var pathToJson = process.cwd() + '/config.json';
-            nconf.argv().env().file({file: pathToJson});
-            nconf.load();
             projectId = nconf.get('shiptest-GITHUB_ORG_1:projectId');
             var update = {
               propertyBag: {
@@ -648,9 +621,6 @@ describe('Project RunsConfig',
         it('Clear ProjectTimeout',
           function (done) {
             this.timeout(0);
-            var pathToJson = process.cwd() + '/config.json';
-            nconf.argv().env().file({file: pathToJson});
-            nconf.load();
             projectId = nconf.get('shiptest-GITHUB_ORG_1:projectId');
             var update = {
               clearTimeoutMS: true
@@ -678,9 +648,6 @@ describe('Project RunsConfig',
         it('Enable Serialization',
           function (done) {
             this.timeout(0);
-            var pathToJson = process.cwd() + '/config.json';
-            nconf.argv().env().file({file: pathToJson});
-            nconf.load();
             projectId = nconf.get('shiptest-GITHUB_ORG_1:projectId');
             var update = {
               propertyBag: {
@@ -737,9 +704,6 @@ describe('Project RunsConfig',
         it('Enable ReleaseBuilds',
           function (done) {
             this.timeout(0);
-            var pathToJson = process.cwd() + '/config.json';
-            nconf.argv().env().file({file: pathToJson});
-            nconf.load();
             projectId = nconf.get('shiptest-GITHUB_ORG_1:projectId');
             var update = {
               propertyBag: {
@@ -796,9 +760,6 @@ describe('Project RunsConfig',
         it('Get ProjectsById',
           function (done) {
             this.timeout(0);
-            var pathToJson = process.cwd() + '/config.json';
-            nconf.argv().env().file({file: pathToJson});
-            nconf.load();
             shippable.getProjectById(projectId,
               function (err, proj) {
                 if (err) {

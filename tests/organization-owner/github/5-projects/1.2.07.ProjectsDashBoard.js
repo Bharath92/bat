@@ -24,9 +24,6 @@ describe('Projects Dashboard',
         it('Trigger new build request',
           function (done) {
             this.timeout(0);
-            var pathToJson = process.cwd() + '/config.json';
-            nconf.argv().env().file({file: pathToJson});
-            nconf.load();
             projectId = nconf.get('shiptest-GITHUB_ORG_1:projectId');
             shippable = new Shippable(global.config.apiToken);
             shippable.triggerNewBuildByProjectId(projectId, {},

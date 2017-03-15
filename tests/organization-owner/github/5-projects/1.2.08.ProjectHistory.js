@@ -29,9 +29,6 @@ describe('Project History',
         it('Get ProjectsById',
           function (done) {
             this.timeout(0);
-            var pathToJson = process.cwd() + '/config.json';
-            nconf.argv().env().file({file: pathToJson});
-            nconf.load();
             projectId = nconf.get('shiptest-GITHUB_ORG_1:projectId');
             shippable = new Shippable(config.apiToken);
             shippable.getProjectById(projectId,
