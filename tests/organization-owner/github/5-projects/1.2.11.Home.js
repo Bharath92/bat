@@ -31,9 +31,6 @@ describe('Home Dashboard',
         it('Get ProjectAccounts',
           function (done) {
             this.timeout(0);
-            var pathToJson = process.cwd() + '/config.json';
-            nconf.argv().env().file({file: pathToJson});
-            nconf.load();
             accountId = nconf.get('shiptest-github-owner:accountId');
             shippable = new Shippable(global.config.apiToken);
             var query = util.format('accountIds=%s', accountId);

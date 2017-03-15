@@ -27,9 +27,6 @@ describe('Disable Project',
         it('Disable Project',
           function (done) {
             this.timeout(0);
-            var pathToJson = process.cwd() + '/config.json';
-            nconf.argv().env().file({file: pathToJson});
-            nconf.load();
             var projectId = nconf.get("shiptest-GITHUB_ORG_1:projectId");
             var shippable = new Shippable(config.apiToken);
             var body = {

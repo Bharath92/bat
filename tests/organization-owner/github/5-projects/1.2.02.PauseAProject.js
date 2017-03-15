@@ -27,9 +27,6 @@ describe('Pause Project',
         it('Pause Project',
           function (done) {
             this.timeout(0);
-            var pathToJson = process.cwd() + '/config.json';
-            nconf.argv().env().file({file: pathToJson});
-            nconf.load();
             projectId = nconf.get("shiptest-GITHUB_ORG_1:projectId");
             var shippable = new Shippable(config.apiToken);
             var update = {

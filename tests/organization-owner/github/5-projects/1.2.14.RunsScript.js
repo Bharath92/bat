@@ -31,9 +31,6 @@ describe('Runs Script',
         it('Get Jobs',
           function (done) {
             this.timeout(0);
-            var pathToJson = process.cwd() + '/config.json';
-            nconf.argv().env().file({file: pathToJson});
-            nconf.load();
             shippable = new Shippable(config.apiToken);
             runId = nconf.get('shiptest-GITHUB_ORG_1:runId');
             var query = util.format('runIds=%s', runId);

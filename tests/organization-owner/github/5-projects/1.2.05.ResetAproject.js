@@ -25,9 +25,6 @@ describe('Reset in project settings page',
         it('Reset project from project settings pages',
           function (done) {
             this.timeout(0);
-            var pathToJson = process.cwd() + '/config.json';
-            nconf.argv().env().file({file: pathToJson});
-            nconf.load();
             var shippable = new Shippable(config.apiToken);
 
             projectId = nconf.get("shiptest-GITHUB_ORG_1:projectId");
