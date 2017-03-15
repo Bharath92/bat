@@ -1294,21 +1294,24 @@ function _performCall(bag, next) {
     request(bag.opts,
       function (err, res, body) {
         var interval = Date.now() - bag.startedAt;
+        var connectionError = false;
 
         if (res)
           logger.debug(
             util.format('%s took %s & returned status %s', bag.who, interval,
               res.statusCode)
           );
+        else
+          connectionError = true;
 
         if (res && res.statusCode > 299)
           err = err || res.statusCode;
 
         if ((res && res.statusCode > 299) || err) {
-          if (res && res.statusCode >= 500) {
+          if ((res && res.statusCode >= 500) || connectionError) {
             logger.error(
               util.format('%s returned error. Retrying in %s seconds',
-                bag.who, bag.timeoutLength * 2)
+                bag.who, bag.timeoutLength*2)
             );
             bag.timeoutLength *= 2;
             if (bag.timeoutLength > bag.timeoutLimit)
