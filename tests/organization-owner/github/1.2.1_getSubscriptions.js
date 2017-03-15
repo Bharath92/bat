@@ -34,7 +34,7 @@ describe(testSuite,
       function (done) {
         this.timeout(0);
         var shippable = new Shippable(config.apiToken);
-        var query = util.format('orgNames=%s,%s',nconf.get("GITHUB_ORG_1"),
+        var query = util.format('subscriptionOrgNames=%s,%s',nconf.get("GITHUB_ORG_1"),
                       nconf.get("GITHUB_ORG_2"));
         shippable.getSubscriptions(query,
           function(err, subscriptions) {

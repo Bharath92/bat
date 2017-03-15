@@ -331,14 +331,6 @@ ShippableAdapter.prototype.getProviderById =
     );
   };
 
-ShippableAdapter.prototype.getProvidersByUrl =
-  function (providerUrl, callback) {
-    this.get(
-      util.format('/providers?url=%s', providerUrl),
-      callback
-    );
-  };
-
 ShippableAdapter.prototype.getResources =
   function (query, callback) {
     this.get(
