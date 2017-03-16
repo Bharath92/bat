@@ -6,7 +6,7 @@ var chai = require('chai');
 var _ = require('underscore');
 var assert = chai.assert;
 var testSuiteNum = '1.';
-var testSuiteDesc = 'Delete Resource';
+var testSuiteDesc = 'Node Settings';
 var adapter = require('../../../../_common/shippable/github/Adapter.js');
 var Shippable = require('../../../../_common/shippable/Adapter.js');
 
@@ -17,14 +17,13 @@ var isTestFailed = false;
 var testCaseErrors = [];
 var shippable = '';
 var subscriptionId = '';
-var subIntId = '';
-var rSyncResourceId = '';
-var syncRepoResourceId = '';
+var clusterNodeId = '';
+var clusterNode = {};
 
 describe(testSuite,
   function () {
 
-    describe('Delete Resource',
+    describe('ClusterNode Settings Controller',
       function () {
         it('Organization-Owner-github-getSubscription',
           function (done) {
@@ -53,27 +52,27 @@ describe(testSuite,
           }
         );
 
-        it('get resources',
+        it('get ClusterNodes',
           function (done) {
             this.timeout(0);
 
-            var query = util.format('isDeleted=false&subscriptionIds=%s',
+            var query = util.format('subscriptionIds=%s&nodeTypeCode=7000',
               subscriptionId);
-            shippable.getResources(query,
-              function(err, resources) {
+
+            shippable.getClusterNodes(query,
+              function(err, clusterNodes) {
                 if (err) {
                   isTestFailed = true;
                   var testCase =
                     util.format(
-                      '\n- [ ] %s: Get resources failed with error: %s',
+                      '\n- [ ] %s: getClusterNodes failed with error: %s',
                       testSuiteDesc, err);
                   testCaseErrors.push(testCase);
                   assert.equal(err, null);
                   return done();
                 } else {
-                  rSyncResourceId = _.first(_.where(resources, {"isJob": true})).id;
-                  syncRepoResourceId = _.first(_.where(resources, {"isJob": false})).id;
-                  subIntId = _.first(resources).subscriptionIntegrationId;
+                  if (!_.isEmpty(clusterNodes))
+                    clusterNodeId = _.first(clusterNodes).id;
                   return done();
                 }
               }
@@ -81,98 +80,131 @@ describe(testSuite,
           }
         );
 
-        it('Get Builds',
+        it('get ClusterNode ById',
           function (done) {
             this.timeout(0);
 
-            if (!rSyncResourceId) return done();
-            var bag = {
-              resourceId : rSyncResourceId,
-              isStatusCompleted: false
+            if (!clusterNodeId) return done();
+
+            shippable.getClusterNodeById(clusterNodeId,
+              function(err, clusterNode) {
+                if (err) {
+                  isTestFailed = true;
+                  var testCase =
+                    util.format(
+                      '\n- [ ] %s: getClusterNodeById failed with error: %s',
+                      testSuiteDesc, err);
+                  testCaseErrors.push(testCase);
+                  assert.equal(err, null);
+                  return done();
+                }
+                clusterNode = clusterNode;
+                return done();
+              }
+            );
+          }
+        );
+
+        it('Edit ClusterNode ById',
+          function (done) {
+            this.timeout(0);
+
+            if (!clusterNodeId) return done();
+
+            var editNode = {
+              friendlyName: 'edit-test-owner-node',
+            };
+            shippable.putClusterNodeById(clusterNodeId, editNode,
+              function(err) {
+                if (err) {
+                  isTestFailed = true;
+                  var testCase =
+                    util.format(
+                      '\n- [ ] %s: putClusterNodeById failed with error: %s',
+                      testSuiteDesc, err);
+                  testCaseErrors.push(testCase);
+                  assert.equal(err, null);
+                }
+                return done();
+              }
+            );
+          }
+        );
+
+        it('Reset ClusterNode',
+          function (done) {
+            this.timeout(0);
+
+            if (!clusterNodeId) return done();
+
+            var editNode = {
+              isReset: true
+            };
+            shippable.putClusterNodeById(clusterNodeId, editNode,
+              function(err) {
+                if (err) {
+                  isTestFailed = true;
+                  var testCase =
+                    util.format(
+                      '\n- [ ] %s: putClusterNodeById failed with error: %s',
+                      testSuiteDesc, err);
+                  testCaseErrors.push(testCase);
+                  assert.equal(err, null);
+                }
+                return done();
+              }
+            );
+          }
+        );
+
+        it('delete ClusterNodeById',
+          function (done) {
+            this.timeout(0);
+
+            if (!clusterNodeId) return done();
+
+            shippable.deleteClusterNodeById(clusterNodeId,
+              function(err) {
+                if (err) {
+                  isTestFailed = true;
+                  var testCase =
+                    util.format(
+                      '\n- [ ] %s: deleteClusterNodeById failed with error: %s',
+                      testSuiteDesc, err);
+                  testCaseErrors.push(testCase);
+                  assert.equal(err, null);
+                }
+                return done();
+              }
+            );
+          }
+        );
+
+        it('Change to Dynamic Node',
+          function (done) {
+            this.timeout(0);
+
+            var update = {
+              nodeTypeCode: 7001
             };
 
-            bag.timeoutLength = 1;
-            bag.timeoutLimit = 180;
-
-            _getBuildByResourceId(bag, done);
-          }
-        );
-
-        it('soft delete resource',
-          function (done) {
-            this.timeout(0);
-
-            if (!syncRepoResourceId) return done();
-            var query = '';
-            shippable.deleteResourceById(syncRepoResourceId, query,
+            shippable.putSubscriptionById(subscriptionId, update,
               function(err) {
                 if (err) {
                   isTestFailed = true;
                   var testCase =
                     util.format(
-                      '\n- [ ] %s: deleteResourceById failed with error: %s',
+                      '\n- [ ] %s: putSubscriptionById failed with error: %s',
                       testSuiteDesc, err);
                   testCaseErrors.push(testCase);
                   assert.equal(err, null);
-                  return done();
-                } else {
-                  logger.debug("Soft Deleted Resource");
-                  return done();
                 }
+                return done();
               }
             );
           }
         );
 
-        it('hard delete resource',
-          function (done) {
-            this.timeout(0);
-
-            if (!syncRepoResourceId) return done();
-            var query = 'hard=true';
-            shippable.deleteResourceById(syncRepoResourceId, query,
-              function(err) {
-                if (err) {
-                  isTestFailed = true;
-                  var testCase =
-                    util.format(
-                      '\n- [ ] %s: deleteResourceById failed with error: %s',
-                      testSuiteDesc, err);
-                  testCaseErrors.push(testCase);
-                  assert.equal(err, null);
-                  return done();
-                } else {
-                  logger.debug("Hard Deleted Resource");
-                  return done();
-                }
-              }
-            );
-          }
-        );
-
-        it('delete Github subscriptionIntegration',
-          function (done) {
-            this.timeout(0);
-
-            shippable.deleteSubscriptionIntegrationById(subIntId,
-              function(err) {
-                if (err) {
-                  isTestFailed = true;
-                  var testCase =
-                    util.format(
-                      '\n- [ ] %s: deleteSubscriptionIntegrationById failed ' +
-                      'with error: %s', testSuiteDesc, err);
-                  testCaseErrors.push(testCase);
-                  assert.equal(err, null);
-                  return done();
-                } else {
-                  logger.debug("Deleted github SubscriptionIntegration");
-                  return done();
-                }
-              }
-            );
-          }
-        );
 
       }
     );
@@ -211,41 +243,3 @@ describe(testSuite,
 
   }
 );
-
-function _getBuildByResourceId (bag, done) {
-  var query = util.format('resourceIds=%s',bag.resourceId);
-
-  shippable.getBuilds(query,
-    function(err, builds) {
-      if (err) {
-        isTestFailed = true;
-        var testCase =
-          util.format(
-            '\n- [ ] %s: Get builds, failed with error: %s',
-            testSuiteDesc, err);
-        bag.isStatusCompleted = true;
-        testCaseErrors.push(testCase);
-        assert.equal(err, null);
-        return done();
-      } else {
-        if (!_.isEmpty(builds)) {
-          var build = _.first(builds);
-          if (build.statusCode === 4002 || build.statusCode === 4003 )
-            bag.isStatusCompleted = true;
-        }
-
-        if (!bag.isStatusCompleted) {
-          bag.timeoutLength *= 2;
-          if (bag.timeoutLength > bag.timeoutLimit)
-            bag.timeoutLength = 1;
-
-          setTimeout(function () {
-            _getBuildByResourceId(bag, done);
-          }, bag.timeoutLength * 1000);
-        }
-        if (bag.isStatusCompleted)
-          return done();
-      }
-    }
-  );
-}

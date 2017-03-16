@@ -6,7 +6,7 @@ var chai = require('chai');
 var _ = require('underscore');
 var assert = chai.assert;
 var testSuiteNum = '1.';
-var testSuiteDesc = 'Delete Resource';
+var testSuiteDesc = 'Add New Nodes';
 var adapter = require('../../../../_common/shippable/github/Adapter.js');
 var Shippable = require('../../../../_common/shippable/Adapter.js');
 
@@ -17,14 +17,15 @@ var isTestFailed = false;
 var testCaseErrors = [];
 var shippable = '';
 var subscriptionId = '';
-var subIntId = '';
-var rSyncResourceId = '';
-var syncRepoResourceId = '';
+var isCustomNode = false;
+var isDynamicNode = false;
+var hostChangeAllowed;
+var clusterNodeId = '';
 
 describe(testSuite,
   function () {
 
-    describe('Delete Resource',
+    describe('Add New Nodes Controller',
       function () {
         it('Organization-Owner-github-getSubscription',
           function (done) {
@@ -53,27 +54,25 @@ describe(testSuite,
           }
         );
 
-        it('get resources',
+        it('get Subscription State By Id',
           function (done) {
             this.timeout(0);
 
-            var query = util.format('isDeleted=false&subscriptionIds=%s',
-              subscriptionId);
-            shippable.getResources(query,
-              function(err, resources) {
+            shippable.getSubscriptionStateById(subscriptionId,
+              function(err, subscriptionState) {
                 if (err) {
                   isTestFailed = true;
                   var testCase =
                     util.format(
-                      '\n- [ ] %s: Get resources failed with error: %s',
+                      '\n- [ ] %s: getSubscriptionState failed with error: %s',
                       testSuiteDesc, err);
                   testCaseErrors.push(testCase);
                   assert.equal(err, null);
                   return done();
                 } else {
-                  rSyncResourceId = _.first(_.where(resources, {"isJob": true})).id;
-                  syncRepoResourceId = _.first(_.where(resources, {"isJob": false})).id;
-                  subIntId = _.first(resources).subscriptionIntegrationId;
+                  isCustomNode = (subscriptionState.nodeTypeCode === 7000);
+                  isDynamicNode = (subscriptionState.nodeTypeCode === 7001);
+                  hostChangeAllowed = subscriptionState.hostChangeAllowed;
                   return done();
                 }
               }
@@ -81,42 +80,37 @@ describe(testSuite,
           }
         );
 
-        it('Get Builds',
+        it('Add a custom node',
           function (done) {
             this.timeout(0);
 
-            if (!rSyncResourceId) return done();
-            var bag = {
-              resourceId : rSyncResourceId,
-              isStatusCompleted: false
+            if (isDynamicNode) return done();
+
+            var newNode = {
+              subscriptionId: subscriptionId,
+              friendlyName: 'test-owner-node',
+              location: '52.53.233.36',
+              nodeInitScript: '{"script":null,"name":"ubu_16.04_docker_1.13.sh"}',
+              nodeType: 'slave',
+              status: 'ready',
+              initializeSwap: false,
+              nodeTypeCode: 7000,
+              sshPort: 22,
+              isShippableInitialized: true
             };
-
-            bag.timeoutLength = 1;
-            bag.timeoutLimit = 180;
-
-            _getBuildByResourceId(bag, done);
-          }
-        );
-
-        it('soft delete resource',
-          function (done) {
-            this.timeout(0);
-
-            if (!syncRepoResourceId) return done();
-            var query = '';
-            shippable.deleteResourceById(syncRepoResourceId, query,
-              function(err) {
+            shippable.postToClusterNode(newNode,
+              function(err, node) {
                 if (err) {
                   isTestFailed = true;
                   var testCase =
                     util.format(
-                      '\n- [ ] %s: deleteResourceById failed with error: %s',
+                      '\n- [ ] %s: postToClusterNode failed with error: %s',
                       testSuiteDesc, err);
                   testCaseErrors.push(testCase);
                   assert.equal(err, null);
                   return done();
                 } else {
-                  logger.debug("Soft Deleted Resource");
+                  clusterNodeId = node.id;
                   return done();
                 }
               }
@@ -124,51 +118,24 @@ describe(testSuite,
           }
         );
 
-        it('hard delete resource',
+        it('get ClusterNode ById',
           function (done) {
             this.timeout(0);
 
-            if (!syncRepoResourceId) return done();
-            var query = 'hard=true';
-            shippable.deleteResourceById(syncRepoResourceId, query,
+            if (isDynamicNode) return done();
+
+            shippable.getClusterNodeById(clusterNodeId,
               function(err) {
                 if (err) {
                   isTestFailed = true;
                   var testCase =
                     util.format(
-                      '\n- [ ] %s: deleteResourceById failed with error: %s',
+                      '\n- [ ] %s: getClusterNodeById failed with error: %s',
                       testSuiteDesc, err);
                   testCaseErrors.push(testCase);
                   assert.equal(err, null);
-                  return done();
-                } else {
-                  logger.debug("Hard Deleted Resource");
-                  return done();
                 }
-              }
-            );
-          }
-        );
-
-        it('delete Github subscriptionIntegration',
-          function (done) {
-            this.timeout(0);
-
-            shippable.deleteSubscriptionIntegrationById(subIntId,
-              function(err) {
-                if (err) {
-                  isTestFailed = true;
-                  var testCase =
-                    util.format(
-                      '\n- [ ] %s: deleteSubscriptionIntegrationById failed ' +
-                      'with error: %s', testSuiteDesc, err);
-                  testCaseErrors.push(testCase);
-                  assert.equal(err, null);
-                  return done();
-                } else {
-                  logger.debug("Deleted github SubscriptionIntegration");
-                  return done();
-                }
+                return done();
               }
             );
           }
@@ -211,41 +178,3 @@ describe(testSuite,
 
   }
 );
-
-function _getBuildByResourceId (bag, done) {
-  var query = util.format('resourceIds=%s',bag.resourceId);
-
-  shippable.getBuilds(query,
-    function(err, builds) {
-      if (err) {
-        isTestFailed = true;
-        var testCase =
-          util.format(
-            '\n- [ ] %s: Get builds, failed with error: %s',
-            testSuiteDesc, err);
-        bag.isStatusCompleted = true;
-        testCaseErrors.push(testCase);
-        assert.equal(err, null);
-        return done();
-      } else {
-        if (!_.isEmpty(builds)) {
-          var build = _.first(builds);
-          if (build.statusCode === 4002 || build.statusCode === 4003 )
-            bag.isStatusCompleted = true;
-        }
-
-        if (!bag.isStatusCompleted) {
-          bag.timeoutLength *= 2;
-          if (bag.timeoutLength > bag.timeoutLimit)
-            bag.timeoutLength = 1;
-
-          setTimeout(function () {
-            _getBuildByResourceId(bag, done);
-          }, bag.timeoutLength * 1000);
-        }
-        if (bag.isStatusCompleted)
-          return done();
-      }
-    }
-  );
-}

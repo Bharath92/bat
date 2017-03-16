@@ -126,7 +126,8 @@ describe(testSuite,
                   assert.equal(err, null);
                   return done();
                 } else{
-                  projectId = build.projectId;
+                  if (build.projectId)
+                    projectId = build.projectId;
                   return done();
                 }
               }
@@ -138,6 +139,7 @@ describe(testSuite,
           function (done) {
             this.timeout(0);
 
+            if (!projectId) return done();
             var query = util.format('buildIds=%s&projectIds=%s',
               buildId, projectId);
             shippable.getBuildJobs(query,
@@ -161,6 +163,7 @@ describe(testSuite,
           function (done) {
             this.timeout(0);
 
+            if (!resourceId) return done();
             var skip = (versionNavCurrentPage - 1) * versionNavPageLimit;
             var query = util.format(
               'resourceIds=%s&subscriptionIds=%s&limit=%d&skip=%d',
@@ -194,6 +197,7 @@ describe(testSuite,
             this.timeout(0);
 
             if (_.isEmpty(versionsToGet)) return done();
+            if (!resourceId) return done();
 
             var query = util.format('resourceIds=%s&subscriptionIds=%s&versionIds=%s',
               resourceId, subscriptionId, versionsToGet);
@@ -221,6 +225,8 @@ describe(testSuite,
           function (done) {
             this.timeout(0);
 
+            if (!resourceId) return done();
+
             shippable.triggerNewBuildByResourceId(resourceId,
               function(err) {
                 if (err) {
@@ -242,6 +248,7 @@ describe(testSuite,
           function (done) {
             this.timeout(0);
 
+            if (!buildId) return done();
             shippable.putBuildById(buildId, {},
               function(err) {
                 if (err) {
@@ -263,6 +270,7 @@ describe(testSuite,
           function (done) {
             this.timeout(0);
 
+            if (!buildId) return done();
             shippable.getBuildById(buildId,
               function(err) {
                 if (err) {
@@ -290,6 +298,7 @@ describe(testSuite,
               }
             };
 
+            if (!resourceId) return done();
             shippable.putResourceById(resourceId, update,
               function(err) {
                 if (err) {
@@ -316,6 +325,8 @@ describe(testSuite,
                 isPaused: false
               }
             };
+
+            if (!resourceId) return done();
 
             shippable.putResourceById(resourceId, update,
               function(err) {

@@ -161,6 +161,7 @@ describe(testSuite,
           function (done) {
             this.timeout(0);
 
+            if(_.isEmpty(resourcesVm)) return done();
             var versionId = _.first(resourcesVm).lastVersionId;
             shippable.getVersionById(versionId,
               function(err) {
@@ -183,6 +184,7 @@ describe(testSuite,
           function (done) {
             this.timeout(0);
 
+            if(_.isEmpty(resourcesVm)) return done();
             var resourceId = _.first(resourcesVm).id;
             shippable.getResourceById(resourceId,
               function(err) {

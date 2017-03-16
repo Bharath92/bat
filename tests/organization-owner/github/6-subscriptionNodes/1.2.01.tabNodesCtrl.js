@@ -6,7 +6,7 @@ var chai = require('chai');
 var _ = require('underscore');
 var assert = chai.assert;
 var testSuiteNum = '1.';
-var testSuiteDesc = 'Delete Resource';
+var testSuiteDesc = 'Nodes';
 var adapter = require('../../../../_common/shippable/github/Adapter.js');
 var Shippable = require('../../../../_common/shippable/Adapter.js');
 
@@ -17,14 +17,15 @@ var isTestFailed = false;
 var testCaseErrors = [];
 var shippable = '';
 var subscriptionId = '';
-var subIntId = '';
-var rSyncResourceId = '';
-var syncRepoResourceId = '';
+var isCustomNode = false;
+var isDynamicNode = false;
+var jobIds = [];
+var hostChangeAllowed;
 
 describe(testSuite,
   function () {
 
-    describe('Delete Resource',
+    describe('Nodes Controller',
       function () {
         it('Organization-Owner-github-getSubscription',
           function (done) {
@@ -53,27 +54,59 @@ describe(testSuite,
           }
         );
 
-        it('get resources',
+        it('get Subscription State By Id',
           function (done) {
             this.timeout(0);
 
-            var query = util.format('isDeleted=false&subscriptionIds=%s',
+            shippable.getSubscriptionStateById(subscriptionId,
+              function(err, subscriptionState) {
+                if (err) {
+                  isTestFailed = true;
+                  var testCase =
+                    util.format(
+                      '\n- [ ] %s: getSubscriptionState failed with error: %s',
+                      testSuiteDesc, err);
+                  testCaseErrors.push(testCase);
+                  assert.equal(err, null);
+                  return done();
+                } else {
+                  isCustomNode = (subscriptionState.nodeTypeCode === 7000);
+                  isDynamicNode = (subscriptionState.nodeTypeCode === 7001);
+                  hostChangeAllowed = subscriptionState.hostChangeAllowed;
+                  return done();
+                }
+              }
+            );
+          }
+        );
+
+        it('get ClusterNodes',
+          function (done) {
+            this.timeout(0);
+
+            if (isCustomNode) return done();
+
+            var query = util.format('subscriptionIds=%s&nodeTypeCode=7002',
               subscriptionId);
-            shippable.getResources(query,
-              function(err, resources) {
+
+            shippable.getClusterNodes(query,
+              function(err, clusterNodes) {
                 if (err) {
                   isTestFailed = true;
                   var testCase =
                     util.format(
-                      '\n- [ ] %s: Get resources failed with error: %s',
+                      '\n- [ ] %s: getClusterNodes failed with error: %s',
                       testSuiteDesc, err);
                   testCaseErrors.push(testCase);
                   assert.equal(err, null);
                   return done();
                 } else {
-                  rSyncResourceId = _.first(_.where(resources, {"isJob": true})).id;
-                  syncRepoResourceId = _.first(_.where(resources, {"isJob": false})).id;
-                  subIntId = _.first(resources).subscriptionIntegrationId;
+                  jobIds = _.pluck(clusterNodes, 'jobId');
+                  jobIds = _.filter(jobIds,
+                    function (id) {
+                      return !_.isEmpty(id);
+                    }
+                  );
                   return done();
                 }
               }
@@ -81,94 +114,88 @@ describe(testSuite,
           }
         );
 
-        it('Get Builds',
+        it('get Jobs',
           function (done) {
             this.timeout(0);
 
-            if (!rSyncResourceId) return done();
-            var bag = {
-              resourceId : rSyncResourceId,
-              isStatusCompleted: false
-            };
+            if (_.isEmpty(jobIds)) return done();
 
-            bag.timeoutLength = 1;
-            bag.timeoutLimit = 180;
+            var query = util.format('jobIds=%s', jobIds.join(','));
 
-            _getBuildByResourceId(bag, done);
-          }
-        );
-
-        it('soft delete resource',
-          function (done) {
-            this.timeout(0);
-
-            if (!syncRepoResourceId) return done();
-            var query = '';
-            shippable.deleteResourceById(syncRepoResourceId, query,
+            shippable.getJobs(query,
               function(err) {
                 if (err) {
                   isTestFailed = true;
                   var testCase =
                     util.format(
-                      '\n- [ ] %s: deleteResourceById failed with error: %s',
+                      '\n- [ ] %s: getJobs failed with error: %s',
                       testSuiteDesc, err);
                   testCaseErrors.push(testCase);
                   assert.equal(err, null);
-                  return done();
-                } else {
-                  logger.debug("Soft Deleted Resource");
-                  return done();
                 }
+                return done();
               }
             );
           }
         );
 
-        it('hard delete resource',
+        it('get BuildJobs',
           function (done) {
             this.timeout(0);
 
-            if (!syncRepoResourceId) return done();
-            var query = 'hard=true';
-            shippable.deleteResourceById(syncRepoResourceId, query,
+            if (_.isEmpty(jobIds)) return done();
+
+            var query = util.format('jobIds==%s', jobIds.join(','));
+
+            shippable.getBuildJobs(query,
               function(err) {
                 if (err) {
                   isTestFailed = true;
                   var testCase =
                     util.format(
-                      '\n- [ ] %s: deleteResourceById failed with error: %s',
+                      '\n- [ ] %s: getBuildJobs failed with error: %s',
                       testSuiteDesc, err);
                   testCaseErrors.push(testCase);
                   assert.equal(err, null);
-                  return done();
-                } else {
-                  logger.debug("Hard Deleted Resource");
-                  return done();
                 }
+                return done();
               }
             );
           }
         );
 
-        it('delete Github subscriptionIntegration',
+        it('Change to Custom Node',
           function (done) {
             this.timeout(0);
+            if (!hostChangeAllowed) return done();
 
-            shippable.deleteSubscriptionIntegrationById(subIntId,
+            var update = {};
+
+            if (isCustomNode)
+              update.nodeTypeCode = 7001;
+            else if (isDynamicNode)
+              update.nodeTypeCode = 7000;
+
+            shippable.putSubscriptionById(subscriptionId, update,
               function(err) {
                 if (err) {
                   isTestFailed = true;
                   var testCase =
                     util.format(
-                      '\n- [ ] %s: deleteSubscriptionIntegrationById failed ' +
-                      'with error: %s', testSuiteDesc, err);
+                      '\n- [ ] %s: putSubscriptionById failed with error: %s',
+                      testSuiteDesc, err);
                   testCaseErrors.push(testCase);
                   assert.equal(err, null);
                   return done();
-                } else {
-                  logger.debug("Deleted github SubscriptionIntegration");
-                  return done();
                 }
+                if (update.nodeTypeCode === 7001) {
+                  isCustomNode = false;
+                  isDynamicNode = true;
+                } else if (update.nodeTypeCode === 7000) {
+                  isCustomNode = true;
+                  isDynamicNode = false;
+                }
+                return done();
               }
             );
           }
@@ -211,41 +238,3 @@ describe(testSuite,
 
   }
 );
-
-function _getBuildByResourceId (bag, done) {
-  var query = util.format('resourceIds=%s',bag.resourceId);
-
-  shippable.getBuilds(query,
-    function(err, builds) {
-      if (err) {
-        isTestFailed = true;
-        var testCase =
-          util.format(
-            '\n- [ ] %s: Get builds, failed with error: %s',
-            testSuiteDesc, err);
-        bag.isStatusCompleted = true;
-        testCaseErrors.push(testCase);
-        assert.equal(err, null);
-        return done();
-      } else {
-        if (!_.isEmpty(builds)) {
-          var build = _.first(builds);
-          if (build.statusCode === 4002 || build.statusCode === 4003 )
-            bag.isStatusCompleted = true;
-        }
-
-        if (!bag.isStatusCompleted) {
-          bag.timeoutLength *= 2;
-          if (bag.timeoutLength > bag.timeoutLimit)
-            bag.timeoutLength = 1;
-
-          setTimeout(function () {
-            _getBuildByResourceId(bag, done);
-          }, bag.timeoutLength * 1000);
-        }
-        if (bag.isStatusCompleted)
-          return done();
-      }
-    }
-  );
-}

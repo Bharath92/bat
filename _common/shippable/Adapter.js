@@ -244,6 +244,22 @@ ShippableAdapter.prototype.getJobConsolesByJobId =
     );
   };
 
+ShippableAdapter.prototype.getClusterNodeConsoleByClusterNodeId =
+  function (clusterNodeId, callback) {
+    this.get(
+      util.format('/clusterNodes/%s/clusterNodeConsoles', clusterNodeId),
+      callback
+    );
+  };
+
+ShippableAdapter.prototype.getClusterNodeStats =
+  function (query, callback) {
+    this.get(
+      util.format('/clusterNodeStats?%s', query),
+      callback
+    );
+  };
+
 ShippableAdapter.prototype.getJobs =
   function (query, callback) {
     this.get(
@@ -863,6 +879,14 @@ ShippableAdapter.prototype.postClusterNodeStatus =
     this.post(
       util.format('/clusterNodes/%s/status', clusterNodeId),
       {status: status},
+      callback
+    );
+  };
+
+ShippableAdapter.prototype.getNodeScripts =
+  function (query, callback) {
+    this.get(
+      util.format('/passthrough/nodes/scripts?%s', query),
       callback
     );
   };

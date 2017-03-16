@@ -6,7 +6,7 @@ var chai = require('chai');
 var _ = require('underscore');
 var assert = chai.assert;
 var testSuiteNum = '1.';
-var testSuiteDesc = 'Job Console';
+var testSuiteDesc = 'Node Stats';
 var adapter = require('../../../../_common/shippable/github/Adapter.js');
 var Shippable = require('../../../../_common/shippable/Adapter.js');
 
@@ -16,17 +16,13 @@ var testSuite = util.format('%s2 - %s', testSuiteNum,
 var isTestFailed = false;
 var testCaseErrors = [];
 var shippable = '';
-var resource = {};
 var subscriptionId = '';
-var jobsVm = [];
-var buildId = '';
-var resourceId = '';
-var buildJobId = '';
+var clusterNodeId = '';
 
 describe(testSuite,
   function () {
 
-    describe('Job Consoles Controller',
+    describe('ClusterNode Stats Controller',
       function () {
         it('Organization-Owner-github-getSubscription',
           function (done) {
@@ -55,25 +51,27 @@ describe(testSuite,
           }
         );
 
-        it('get resources',
+        it('get ClusterNodes',
           function (done) {
             this.timeout(0);
 
-            var query = util.format('isDeleted=false&subscriptionIds=%s',
+            var query = util.format('subscriptionIds=%s&nodeTypeCode=7000',
               subscriptionId);
-            shippable.getResources(query,
-              function(err, resources) {
+
+            shippable.getClusterNodes(query,
+              function(err, clusterNodes) {
                 if (err) {
                   isTestFailed = true;
                   var testCase =
                     util.format(
-                      '\n- [ ] %s: Get resources failed with error: %s',
+                      '\n- [ ] %s: getClusterNodes failed with error: %s',
                       testSuiteDesc, err);
                   testCaseErrors.push(testCase);
                   assert.equal(err, null);
                   return done();
                 } else {
-                  jobsVm = _.where(resources, {"isJob": true});
+                  if (!_.isEmpty(clusterNodes))
+                    clusterNodeId = _.first(clusterNodes).id;
                   return done();
                 }
               }
@@ -81,71 +79,22 @@ describe(testSuite,
           }
         );
 
-        it('get Builds By resourceId',
+        it('get ClusterNode Stats',
           function (done) {
             this.timeout(0);
 
-            resourceId = _.first(jobsVm).id;
-            var query = util.format('resourceIds=%s', resourceId);
-            shippable.getBuilds(query,
-              function(err, builds) {
-                if (err) {
-                  isTestFailed = true;
-                  var testCase =
-                    util.format(
-                      '\n- [ ] %s: getBuilds failed with error: %s',
-                      testSuiteDesc, err);
-                  testCaseErrors.push(testCase);
-                  assert.equal(err, null);
-                  return done();
-                } else {
-                  buildId = _.first(builds).id;
-                  return done();
-                }
-              }
-            );
-          }
-        );
+            if (!clusterNodeId) return done();
 
-        it('get BuildJobs',
-          function (done) {
-            this.timeout(0);
-
-            var query = util.format('buildIds=%s', buildId);
-            shippable.getBuildJobs(query,
-              function(err, buildJobs) {
-                if (err) {
-                  isTestFailed = true;
-                  var testCase =
-                    util.format(
-                      '\n- [ ] %s: getBuildJobs failed with error: %s',
-                      testSuiteDesc, err);
-                  testCaseErrors.push(testCase);
-                  assert.equal(err, null);
-                  return done();
-                } else {
-                  buildJobId = _.first(buildJobs).id;
-                  return done();
-                }
-              }
-            );
-          }
-        );
-
-        it('get BuildJobConsoles By BuildJobId',
-          function (done) {
-            this.timeout(0);
-
-            if (!buildJobId) return done();
-            var query = util.format('buildIds=%s', buildId);
-            shippable.getBuildJobConsolesByBuildJobId(buildJobId,
+            var query = util.format('clusterNodeIds=%s&limit=%s',
+              clusterNodeId, 20);
+            shippable.getClusterNodeStats(query,
               function(err) {
                 if (err) {
                   isTestFailed = true;
                   var testCase =
                     util.format(
-                      '\n- [ ] %s: getBuildJobConsolesByBuildJobId failed' +
-                      'with error: %s', testSuiteDesc, err);
+                      '\n- [ ] %s: getClusterNodeStats failed' +
+                      ' with error: %s', testSuiteDesc, err);
                   testCaseErrors.push(testCase);
                   assert.equal(err, null);
                 }
