@@ -71,6 +71,7 @@ describe(testSuite,
                   assert.equal(err, null);
                   return done();
                 } else {
+                  console.log("clusterNodes::",clusterNodes);
                   if (!_.isEmpty(clusterNodes))
                     clusterNodeId = _.first(clusterNodes).id;
                   return done();
@@ -84,6 +85,7 @@ describe(testSuite,
           function (done) {
             this.timeout(0);
 
+            console.log("clusterNodeId::",clusterNodeId);
             if (!clusterNodeId) return done();
 
             shippable.getClusterNodeById(clusterNodeId,
@@ -98,7 +100,9 @@ describe(testSuite,
                   assert.equal(err, null);
                   return done();
                 }
+                console.log("clusterNodeb::",clusterNode);
                 clusterNode = clusterNode;
+                console.log("clusterNodeba::",clusterNode);
                 return done();
               }
             );
