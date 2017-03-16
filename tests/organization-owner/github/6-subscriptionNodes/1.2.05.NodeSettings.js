@@ -89,7 +89,7 @@ describe(testSuite,
             if (!clusterNodeId) return done();
 
             shippable.getClusterNodeById(clusterNodeId,
-              function(err, clusterNode) {
+              function(err, cnode) {
                 if (err) {
                   isTestFailed = true;
                   var testCase =
@@ -100,8 +100,8 @@ describe(testSuite,
                   assert.equal(err, null);
                   return done();
                 }
-                console.log("clusterNodeb::",clusterNode);
-                clusterNode = clusterNode;
+                console.log("cnode::",cnode);
+                clusterNode = cnode;
                 console.log("clusterNodeba::",clusterNode);
                 return done();
               }
