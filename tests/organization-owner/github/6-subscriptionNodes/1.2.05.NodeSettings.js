@@ -137,6 +137,7 @@ describe(testSuite,
 
             if (!clusterNodeId) return done();
 
+            console.log("clusterNode object::",clusterNode);
             console.log("clusterNode status::",clusterNode.statusCode);
 
             if (clusterNode.statusCode < 30 || clusterNode.statusCode > 90)
