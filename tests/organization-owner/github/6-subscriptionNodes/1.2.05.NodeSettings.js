@@ -147,7 +147,6 @@ describe(testSuite,
             var editNode = {
               isReset: true
             };
-
             shippable.putClusterNodeById(clusterNodeId, editNode,
               function(err) {
                 if (err) {
