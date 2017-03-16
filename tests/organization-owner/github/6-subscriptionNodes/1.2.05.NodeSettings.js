@@ -71,7 +71,6 @@ describe(testSuite,
                   assert.equal(err, null);
                   return done();
                 } else {
-                  console.log("clusterNodes::",clusterNodes);
                   if (!_.isEmpty(clusterNodes))
                     clusterNodeId = _.first(clusterNodes).id;
                   return done();
@@ -85,7 +84,6 @@ describe(testSuite,
           function (done) {
             this.timeout(0);
 
-            console.log("clusterNodeId::",clusterNodeId);
             if (!clusterNodeId) return done();
 
             shippable.getClusterNodeById(clusterNodeId,
@@ -100,9 +98,7 @@ describe(testSuite,
                   assert.equal(err, null);
                   return done();
                 }
-                console.log("cnode::",cnode);
                 clusterNode = cnode;
-                console.log("clusterNodeba::",clusterNode);
                 return done();
               }
             );
@@ -141,13 +137,8 @@ describe(testSuite,
 
             if (!clusterNodeId) return done();
 
-            console.log("clusterNode object::",clusterNode);
-            console.log("clusterNode status::",clusterNode.statusCode);
-
             if (clusterNode.statusCode < 30 || clusterNode.statusCode > 90)
               return done();
-
-            console.log("clusterNode status::",clusterNode.statusCode);
 
             var editNode = {
               isReset: true
