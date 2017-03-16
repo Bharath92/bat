@@ -100,8 +100,9 @@ describe(testSuite,
                   assert.equal(err, null);
                   return done();
                 }
-                console.log("clusterNode::",clusterNode);
+                console.log("clusterNodeb::",clusterNode);
                 clusterNode = clusterNode;
+                console.log("clusterNodeba::",clusterNode);
                 return done();
               }
             );
