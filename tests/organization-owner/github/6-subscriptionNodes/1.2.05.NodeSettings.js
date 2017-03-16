@@ -137,12 +137,17 @@ describe(testSuite,
 
             if (!clusterNodeId) return done();
 
+            console.log("clusterNode status::",clusterNode.statusCode);
+
             if (clusterNode.statusCode < 30 || clusterNode.statusCode > 90)
               return done();
+
+            console.log("clusterNode status::",clusterNode.statusCode);
 
             var editNode = {
               isReset: true
             };
+
             shippable.putClusterNodeById(clusterNodeId, editNode,
               function(err) {
                 if (err) {
