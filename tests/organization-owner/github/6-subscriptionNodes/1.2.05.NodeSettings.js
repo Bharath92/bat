@@ -137,6 +137,9 @@ describe(testSuite,
 
             if (!clusterNodeId) return done();
 
+            if (clusterNode.statusCode <30 || clusterNode.statusCode >90)
+              return done();
+
             var editNode = {
               isReset: true
             };
