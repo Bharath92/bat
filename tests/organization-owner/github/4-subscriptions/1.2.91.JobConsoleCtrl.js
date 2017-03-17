@@ -99,7 +99,8 @@ describe(testSuite,
                   assert.equal(err, null);
                   return done();
                 } else {
-                  buildId = _.first(builds).id;
+                  if (!_.isEmpty(builds))
+                    buildId = _.first(builds).id;
                   return done();
                 }
               }
@@ -124,7 +125,8 @@ describe(testSuite,
                   assert.equal(err, null);
                   return done();
                 } else {
-                  buildJobId = _.first(buildJobs).id;
+                  if (!_.isEmpty(buildJobs))
+                    buildJobId = _.first(buildJobs).id;
                   return done();
                 }
               }
