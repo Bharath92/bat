@@ -88,6 +88,8 @@ describe(testSuite,
           function (done) {
             this.timeout(0);
 
+            if (_.isEmpty(jobsVm)) return done();
+
             resourceId = _.first(jobsVm).id;
             var query = util.format('resourceIds=%s', resourceId);
             shippable.getBuilds(query,
