@@ -42,7 +42,13 @@ describe('Edit email with valid and invalid email address in technical contact',
                 } else {
                   if (subscriptions.status<200 || subscriptions.status>=299)
                     logger.warn("status is::",subscriptions.status);
-                  subscriptionId = _.first(subscriptions).id;
+
+                  if (_.isEmpty(subscriptions))
+                    logger.warn('No subscriptions found, skipping subsequent ' +
+                      'testcases');
+                  else
+                    subscriptionId = _.first(subscriptions).id;
+
                   return done();
                 }
               }
@@ -59,6 +65,8 @@ describe('Edit email with valid and invalid email address in technical contact',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
+
+            if (!subscriptionId) return done();
 
             shippable.putSubscriptionById(subscriptionId,
               { opsEmail : 'test@gmail.com' },
@@ -85,6 +93,8 @@ describe('Edit email with valid and invalid email address in technical contact',
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
 
+            if (!subscriptionId) return done();
+
             shippable.putSubscriptionById(subscriptionId,
               { opsEmail : 'test.testt@gmail.com' },
               function(err) {
@@ -110,6 +120,8 @@ describe('Edit email with valid and invalid email address in technical contact',
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
 
+            if (!subscriptionId) return done();
+
             shippable.putSubscriptionById(subscriptionId,
               { opsEmail : 'test@google.co.in' },
               function(err) {
@@ -134,6 +146,8 @@ describe('Edit email with valid and invalid email address in technical contact',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
+
+            if (!subscriptionId) return done();
 
             shippable.putSubscriptionById(subscriptionId,
               { opsEmail : 'test+testing@google.co.in' },
@@ -161,6 +175,8 @@ describe('Edit email with valid and invalid email address in technical contact',
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
 
+            if (!subscriptionId) return done();
+
             shippable.putSubscriptionById(subscriptionId,
               { opsEmail : '\"test"\@gmail.com' },
               function(err) {
@@ -186,6 +202,8 @@ describe('Edit email with valid and invalid email address in technical contact',
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
 
+            if (!subscriptionId) return done();
+
             shippable.putSubscriptionById(subscriptionId,
               { opsEmail : 'test12345@gmail.com' },
               function(err) {
@@ -210,6 +228,8 @@ describe('Edit email with valid and invalid email address in technical contact',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
+
+            if (!subscriptionId) return done();
 
             shippable.putSubscriptionById(subscriptionId,
               { opsEmail : 'test12345@google-co.in' },
@@ -237,6 +257,8 @@ describe('Edit email with valid and invalid email address in technical contact',
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
 
+            if (!subscriptionId) return done();
+
             shippable.putSubscriptionById(subscriptionId,
               { opsEmail : 'test_12345@yahoo.in' },
               function(err) {
@@ -261,6 +283,8 @@ describe('Edit email with valid and invalid email address in technical contact',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
+
+            if (!subscriptionId) return done();
 
             shippable.putSubscriptionById(subscriptionId,
               { opsEmail : 'test_12345@rediff.mail' },
@@ -288,6 +312,8 @@ describe('Edit email with valid and invalid email address in technical contact',
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
 
+            if (!subscriptionId) return done();
+
             shippable.putSubscriptionById(subscriptionId,
               { opsEmail : 'test_12345@google.co.in' },
               function(err) {
@@ -314,6 +340,8 @@ describe('Edit email with valid and invalid email address in technical contact',
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
 
+            if (!subscriptionId) return done();
+
             shippable.putSubscriptionById(subscriptionId,
               { opsEmail : 'あいうえお@domain.com' },
               function(err) {
@@ -339,6 +367,8 @@ describe('Edit email with valid and invalid email address in technical contact',
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
 
+            if (!subscriptionId) return done();
+
             shippable.putSubscriptionById(subscriptionId,
               { opsEmail : 'email@domain.web' },
               function(err) {
@@ -363,6 +393,8 @@ describe('Edit email with valid and invalid email address in technical contact',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
+
+            if (!subscriptionId) return done();
 
             shippable.putSubscriptionById(subscriptionId,
               { opsEmail : 'test-12345@google.co.in' },
@@ -396,6 +428,8 @@ describe('Edit email with valid and invalid email address in technical contact',
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
 
+            if (!subscriptionId) return done();
+
             shippable.putSubscriptionById(subscriptionId,
               { opsEmail : 'plainaddress' },
               function(err) {
@@ -421,6 +455,8 @@ describe('Edit email with valid and invalid email address in technical contact',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
+
+            if (!subscriptionId) return done();
 
             shippable.putSubscriptionById(subscriptionId,
               { opsEmail : 'test+testing@123.123.123.123' },
@@ -449,6 +485,8 @@ describe('Edit email with valid and invalid email address in technical contact',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
+
+            if (!subscriptionId) return done();
 
             shippable.putSubscriptionById(subscriptionId,
               { opsEmail : 'test+testing@[123.123.123.123]' },
@@ -479,6 +517,8 @@ describe('Edit email with valid and invalid email address in technical contact',
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
 
+            if (!subscriptionId) return done();
+
             shippable.putSubscriptionById(subscriptionId,
               { opsEmail : '#@%^%#$@#$@#.com' },
               function(err) {
@@ -505,6 +545,8 @@ describe('Edit email with valid and invalid email address in technical contact',
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
 
+            if (!subscriptionId) return done();
+
             shippable.putSubscriptionById(subscriptionId,
               { opsEmail : '@domain.com' },
               function(err) {
@@ -530,6 +572,8 @@ describe('Edit email with valid and invalid email address in technical contact',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
+
+            if (!subscriptionId) return done();
 
             shippable.putSubscriptionById(subscriptionId,
               { opsEmail : 'Joe Smith <email@domain.com>' },
@@ -560,6 +604,8 @@ describe('Edit email with valid and invalid email address in technical contact',
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
 
+            if (!subscriptionId) return done();
+
             shippable.putSubscriptionById(subscriptionId,
               { opsEmail : 'email.domain.com' },
               function(err) {
@@ -585,6 +631,8 @@ describe('Edit email with valid and invalid email address in technical contact',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
+
+            if (!subscriptionId) return done();
 
             shippable.putSubscriptionById(subscriptionId,
               { opsEmail : 'email@domain@domain.com' },
@@ -614,6 +662,8 @@ describe('Edit email with valid and invalid email address in technical contact',
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
 
+            if (!subscriptionId) return done();
+
             shippable.putSubscriptionById(subscriptionId,
               { opsEmail : '.email@domain.com' },
               function(err) {
@@ -641,6 +691,8 @@ describe('Edit email with valid and invalid email address in technical contact',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
+
+            if (!subscriptionId) return done();
 
             shippable.putSubscriptionById(subscriptionId,
               { opsEmail : 'email.@domain.com' },
@@ -670,6 +722,8 @@ describe('Edit email with valid and invalid email address in technical contact',
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
 
+            if (!subscriptionId) return done();
+
             shippable.putSubscriptionById(subscriptionId,
               { opsEmail : 'email..email@domain.com' },
               function(err) {
@@ -697,6 +751,8 @@ describe('Edit email with valid and invalid email address in technical contact',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
+
+            if (!subscriptionId) return done();
 
             shippable.putSubscriptionById(subscriptionId,
               { opsEmail : 'email@domain.com (Joe Smith)' },
@@ -728,6 +784,8 @@ describe('Edit email with valid and invalid email address in technical contact',
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
 
+            if (!subscriptionId) return done();
+
             shippable.putSubscriptionById(subscriptionId,
               { opsEmail : 'email@domain' },
               function(err) {
@@ -754,6 +812,8 @@ describe('Edit email with valid and invalid email address in technical contact',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
+
+            if (!subscriptionId) return done();
 
             shippable.putSubscriptionById(subscriptionId,
               { opsEmail : 'email@-domain.com' },
@@ -784,6 +844,8 @@ describe('Edit email with valid and invalid email address in technical contact',
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
 
+            if (!subscriptionId) return done();
+
             shippable.putSubscriptionById(subscriptionId,
               { opsEmail : 'email@111.222.333.44444' },
               function(err) {
@@ -811,6 +873,8 @@ describe('Edit email with valid and invalid email address in technical contact',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
+
+            if (!subscriptionId) return done();
 
             shippable.putSubscriptionById(subscriptionId,
               { opsEmail : 'email@domain..com' },

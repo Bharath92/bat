@@ -55,6 +55,8 @@ describe(testSuite,
           function (done) {
             this.timeout(0);
 
+            if (!resource) return done();
+
             var subIntId = resource.subscriptionIntegrationId;
             shippable.getSubscriptionIntegrationById(subIntId,
               function (err) {

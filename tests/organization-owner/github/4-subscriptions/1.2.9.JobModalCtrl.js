@@ -50,7 +50,13 @@ describe(testSuite,
                 } else {
                   if (subscriptions.status<200 || subscriptions.status>=299)
                     logger.warn("status is::",subscriptions.status);
-                  subscriptionId = _.first(subscriptions).id;
+
+                  if (_.isEmpty(subscriptions))
+                    logger.warn('No subscriptions found, skipping subsequent ' +
+                      'testcases');
+                  else
+                    subscriptionId = _.first(subscriptions).id;
+
                   return done();
                 }
               }
@@ -104,7 +110,8 @@ describe(testSuite,
                   assert.equal(err, null);
                   return done();
                 } else {
-                  buildId = _.first(builds).id;
+                  if (!_.isEmpty(builds))
+                    buildId = _.first(builds).id;
                   return done();
                 }
               }
@@ -115,6 +122,8 @@ describe(testSuite,
         it('get Build By id',
           function (done) {
             this.timeout(0);
+
+            if (!buildId) return done();
 
             shippable.getBuildById(buildId,
               function(err, build) {
