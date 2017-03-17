@@ -15,7 +15,6 @@ var testSuite = util.format('%s2 - %s', testSuiteNum,
 
 var isTestFailed = false;
 var testCaseErrors = [];
-var githubAccntIntId = '';
 var githubSubIntId = '';
 var shippable = '';
 var gitHubAccntInt = {};
@@ -51,7 +50,13 @@ describe(testSuite,
                 } else {
                   if (subscriptions.status<200 || subscriptions.status>=299)
                     logger.warn("status is::",subscriptions.status);
-                  subscriptionId = _.first(subscriptions).id;
+
+                  if (_.isEmpty(subscriptions))
+                    logger.warn('No subscriptions found, skipping subsequent ' +
+                      'testcases');
+                  else
+                    subscriptionId = _.first(subscriptions).id;
+
                   return done();
                 }
               }
@@ -77,7 +82,6 @@ describe(testSuite,
                   return done();
                 } else {
                   gitHubAccntInt = _.first(accInts);
-                  githubAccntIntId = gitHubAccntInt.id;
                   return done();
                 }
               }
@@ -88,6 +92,9 @@ describe(testSuite,
         it('Add github subscriptionIntegration',
           function (done) {
             this.timeout(0);
+
+            if (!gitHubAccntInt) return done();
+            if (!subscriptionId) return done();
 
             var body = {
               "accountIntegrationId": gitHubAccntInt.id,
@@ -112,7 +119,10 @@ describe(testSuite,
                   return done();
                 } else {
                   logger.debug('Added subscription integration');
-                  githubSubIntId = res.id;
+
+                  if (!_.isEmpty(res))
+                    githubSubIntId = res.id;
+
                   return done();
                 }
               }
@@ -167,7 +177,8 @@ describe(testSuite,
                 } else {
                   var project = {};
                   project = _.findWhere(projects, {isPrivateRepository: false});
-                  projectId = project.id;
+                  if (project)
+                    projectId = project.id;
                   return done();
                 }
               }
@@ -201,6 +212,9 @@ describe(testSuite,
           function (done) {
             this.timeout(0);
             var query = 'forceSync=true';
+
+            if (!projectId) return done();
+
             shippable.getProjectByIdWithQuery(projectId, query,
               function (err, project) {
                 if (err) {
@@ -225,6 +239,10 @@ describe(testSuite,
         it('Add a resource',
           function (done) {
             this.timeout(0);
+
+            if (!projectId) return done();
+            if (!subscriptionId) return done();
+            if (!githubSubIntId) return done();
 
             resourceName = projectName + '_master';
             var data = {

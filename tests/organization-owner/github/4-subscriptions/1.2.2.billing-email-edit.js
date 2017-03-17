@@ -42,7 +42,13 @@ describe('Edit email with valid and invalid email address',
                 } else {
                   if (subscriptions.status<200 || subscriptions.status>=299)
                     logger.warn("status is::",subscriptions.status);
-                  subscriptionId = _.first(subscriptions).id;
+
+                  if (_.isEmpty(subscriptions))
+                    logger.warn('No subscriptions found, skipping subsequent ' +
+                      'testcases');
+                  else
+                    subscriptionId = _.first(subscriptions).id;
+
                   return done();
                 }
               }
@@ -54,6 +60,8 @@ describe('Edit email with valid and invalid email address',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
+
+            if (!subscriptionId) return done();
 
             shippable.putSubscriptionById(subscriptionId,
               { billingEmail : 'test@gmail.com' },
@@ -80,6 +88,8 @@ describe('Edit email with valid and invalid email address',
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
 
+            if (!subscriptionId) return done();
+
             shippable.putSubscriptionById(subscriptionId,
               { billingEmail : 'test.testt@gmail.com' },
               function(err) {
@@ -105,6 +115,8 @@ describe('Edit email with valid and invalid email address',
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
 
+            if (!subscriptionId) return done();
+
             shippable.putSubscriptionById(subscriptionId,
               { billingEmail : 'test@google.co.in' },
               function(err) {
@@ -129,6 +141,8 @@ describe('Edit email with valid and invalid email address',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
+
+            if (!subscriptionId) return done();
 
             shippable.putSubscriptionById(subscriptionId,
               { billingEmail : 'test+testing@google.co.in' },
@@ -156,6 +170,8 @@ describe('Edit email with valid and invalid email address',
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
 
+            if (!subscriptionId) return done();
+
             shippable.putSubscriptionById(subscriptionId,
               { billingEmail : '\"test"\@gmail.com' },
               function(err) {
@@ -181,6 +197,8 @@ describe('Edit email with valid and invalid email address',
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
 
+            if (!subscriptionId) return done();
+
             shippable.putSubscriptionById(subscriptionId,
               { billingEmail : 'test12345@gmail.com' },
               function(err) {
@@ -205,6 +223,8 @@ describe('Edit email with valid and invalid email address',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
+
+            if (!subscriptionId) return done();
 
             shippable.putSubscriptionById(subscriptionId,
               { billingEmail : 'test12345@google-co.in' },
@@ -232,6 +252,8 @@ describe('Edit email with valid and invalid email address',
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
 
+            if (!subscriptionId) return done();
+
             shippable.putSubscriptionById(subscriptionId,
               { billingEmail : 'test_12345@yahoo.in' },
               function(err) {
@@ -256,6 +278,8 @@ describe('Edit email with valid and invalid email address',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
+
+            if (!subscriptionId) return done();
 
             shippable.putSubscriptionById(subscriptionId,
               { billingEmail : 'test_12345@rediff.mail' },
@@ -283,6 +307,8 @@ describe('Edit email with valid and invalid email address',
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
 
+            if (!subscriptionId) return done();
+
             shippable.putSubscriptionById(subscriptionId,
               { billingEmail : 'test_12345@google.co.in' },
               function(err) {
@@ -309,6 +335,8 @@ describe('Edit email with valid and invalid email address',
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
 
+            if (!subscriptionId) return done();
+
             shippable.putSubscriptionById(subscriptionId,
               { billingEmail : 'あいうえお@domain.com' },
               function(err) {
@@ -334,6 +362,8 @@ describe('Edit email with valid and invalid email address',
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
 
+            if (!subscriptionId) return done();
+
             shippable.putSubscriptionById(subscriptionId,
               { billingEmail : 'email@domain.web' },
               function(err) {
@@ -358,6 +388,8 @@ describe('Edit email with valid and invalid email address',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
+
+            if (!subscriptionId) return done();
 
             shippable.putSubscriptionById(subscriptionId,
               { billingEmail : 'test-12345@google.co.in' },
@@ -391,6 +423,8 @@ describe('Edit email with valid and invalid email address',
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
 
+            if (!subscriptionId) return done();
+
             shippable.putSubscriptionById(subscriptionId,
               { billingEmail : 'plainaddress' },
               function(err) {
@@ -417,6 +451,8 @@ describe('Edit email with valid and invalid email address',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
+
+            if (!subscriptionId) return done();
 
             shippable.putSubscriptionById(subscriptionId,
               { billingEmail : 'test+testing@123.123.123.123' },
@@ -447,6 +483,8 @@ describe('Edit email with valid and invalid email address',
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
 
+            if (!subscriptionId) return done();
+
             shippable.putSubscriptionById(subscriptionId,
               { billingEmail : 'test+testing@[123.123.123.123]' },
               function(err) {
@@ -476,6 +514,8 @@ describe('Edit email with valid and invalid email address',
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
 
+            if (!subscriptionId) return done();
+
             shippable.putSubscriptionById(subscriptionId,
               { billingEmail : '#@%^%#$@#$@#.com' },
               function(err) {
@@ -502,6 +542,8 @@ describe('Edit email with valid and invalid email address',
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
 
+            if (!subscriptionId) return done();
+
             shippable.putSubscriptionById(subscriptionId,
               { billingEmail : '@domain.com' },
               function(err) {
@@ -527,6 +569,8 @@ describe('Edit email with valid and invalid email address',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
+
+            if (!subscriptionId) return done();
 
             shippable.putSubscriptionById(subscriptionId,
               { billingEmail : 'Joe Smith <email@domain.com>' },
@@ -558,6 +602,8 @@ describe('Edit email with valid and invalid email address',
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
 
+            if (!subscriptionId) return done();
+
             shippable.putSubscriptionById(subscriptionId,
               { billingEmail : 'email.domain.com' },
               function(err) {
@@ -583,6 +629,8 @@ describe('Edit email with valid and invalid email address',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
+
+            if (!subscriptionId) return done();
 
             shippable.putSubscriptionById(subscriptionId,
               { billingEmail : 'email@domain@domain.com' },
@@ -612,6 +660,8 @@ describe('Edit email with valid and invalid email address',
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
 
+            if (!subscriptionId) return done();
+
             shippable.putSubscriptionById(subscriptionId,
               { billingEmail : '.email@domain.com' },
               function(err) {
@@ -639,6 +689,8 @@ describe('Edit email with valid and invalid email address',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
+
+            if (!subscriptionId) return done();
 
             shippable.putSubscriptionById(subscriptionId,
               { billingEmail : 'email.@domain.com' },
@@ -669,6 +721,8 @@ describe('Edit email with valid and invalid email address',
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
 
+            if (!subscriptionId) return done();
+
             shippable.putSubscriptionById(subscriptionId,
               { billingEmail : 'email..email@domain.com' },
               function(err) {
@@ -696,6 +750,8 @@ describe('Edit email with valid and invalid email address',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
+
+            if (!subscriptionId) return done();
 
             shippable.putSubscriptionById(subscriptionId,
               { billingEmail : 'email@domain.com (Joe Smith)' },
@@ -727,6 +783,8 @@ describe('Edit email with valid and invalid email address',
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
 
+            if (!subscriptionId) return done();
+
             shippable.putSubscriptionById(subscriptionId,
               { billingEmail : 'email@domain' },
               function(err) {
@@ -754,6 +812,8 @@ describe('Edit email with valid and invalid email address',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
+
+            if (!subscriptionId) return done();
 
             shippable.putSubscriptionById(subscriptionId,
               { billingEmail : 'email@-domain.com' },
@@ -784,6 +844,8 @@ describe('Edit email with valid and invalid email address',
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
 
+            if (!subscriptionId) return done();
+
             shippable.putSubscriptionById(subscriptionId,
               { billingEmail : 'email@111.222.333.44444' },
               function(err) {
@@ -811,6 +873,8 @@ describe('Edit email with valid and invalid email address',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
+
+            if (!subscriptionId) return done();
 
             shippable.putSubscriptionById(subscriptionId,
               { billingEmail : 'email@domain..com' },

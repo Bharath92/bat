@@ -43,7 +43,13 @@ describe(testSuite,
                 } else {
                   if (subscriptions.status<200 || subscriptions.status>=299)
                     logger.warn("status is::",subscriptions.status);
-                  subscriptionId = _.first(subscriptions).id;
+
+                  if (_.isEmpty(subscriptions))
+                    logger.warn('No subscriptions found, skipping subsequent ' +
+                      'testcases');
+                  else
+                    subscriptionId = _.first(subscriptions).id;
+
                   return done();
                 }
               }
@@ -54,6 +60,9 @@ describe(testSuite,
         it('Get resources',
           function (done) {
             this.timeout(0);
+
+            if (!subscriptionId) return done();
+
             var bag = {
               subscriptionId : subscriptionId,
               isStatusCompleted: false

@@ -42,7 +42,13 @@ describe('Reset in subscription settings page',
                 } else {
                   if (subscriptions.status<200 || subscriptions.status>=299)
                     logger.warn("status is::",subscriptions.status);
-                  subscriptionId = _.first(subscriptions).id;
+
+                  if (_.isEmpty(subscriptions))
+                    logger.warn('No subscriptions found, skipping subsequent ' +
+                      'testcases');
+                  else
+                    subscriptionId = _.first(subscriptions).id;
+
                   return done();
                 }
               }
@@ -54,6 +60,9 @@ describe('Reset in subscription settings page',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
+
+            if (!subscriptionId) return done();
+
             shippable.resetSubscriptionById(subscriptionId,
               function (err, resetSub) {
                 if (err || !resetSub) {

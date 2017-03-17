@@ -78,6 +78,8 @@ describe(testSuite,
           function (done) {
             this.timeout(0);
 
+            if (!resource) return done();
+
             var newVersion = {
               resourceId: resource.id,
               projectId: resource.projectId,
