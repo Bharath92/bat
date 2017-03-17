@@ -82,7 +82,7 @@ describe(testSuite,
                 } else {
                   if (_.isEmpty(resources)){
                     logger.warn('getResources returned 0 resources');
-                    assert.notEqual(subscriptions.length, 0);
+                    assert.notEqual(resources.length, 0);
                   }
                   jobsVm = _.where(resources, {"isJob": true});
                   return done();
