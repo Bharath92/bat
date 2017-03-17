@@ -56,6 +56,8 @@ describe('Runs Coverage',
         it('Get Jobs',
           function (done) {
             this.timeout(0);
+            if (!run) return done();
+
             var query = util.format('runIds=%s', run.id);
             shippable.getJobs(query,
               function (err, res) {
@@ -82,6 +84,8 @@ describe('Runs Coverage',
           function (done) {
             this.timeout(0);
             var failedJobId;
+            if (!job) return done();
+
             var query = util.format('jobIds=%s', job.id);
             shippable.getCoverageReports(query,
               function (err) {
@@ -106,6 +110,8 @@ describe('Runs Coverage',
         it('Get Previous Runs',
           function (done) {
             this.timeout(0);
+            if (!job) return done();
+
             var query = util.format('projectIds=%s&status=30&limit=10' +
               '&sortBy=runNumber&sortOrder=-1&maxRunNumber=%s&branch=%s',
               job.projectId,
@@ -160,6 +166,7 @@ describe('Runs Coverage',
 
         it('Get Reports By JobId',
           function (done) {
+            if (!job) return done();
             if(_.isEmpty(previousRun)) return done();
             this.timeout(0);
             shippable.getReportsByJobId(job.id,

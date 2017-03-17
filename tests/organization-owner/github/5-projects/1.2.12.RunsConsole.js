@@ -54,6 +54,8 @@ describe('Runs Console',
         it('Get JobConsoles By JobId',
           function (done) {
             this.timeout(0);
+            if (_.isEmpty(jobs)) return done();
+
             async.each(jobs,
               function(job, nextJob) {
                 shippable.getJobConsolesByJobId(job.id,
@@ -83,6 +85,8 @@ describe('Runs Console',
         it('Trigger New Build',
           function (done) {
             this.timeout(0);
+            if (_.isEmpty(jobs)) return done();
+
             var job = _.first(jobs);
             var projectId = job.projectId;
             var payload = {

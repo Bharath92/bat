@@ -43,7 +43,13 @@ describe('Enable Project',
                 } else {
                   if (subscriptions.status<200 || subscriptions.status>=299)
                     logger.warn("status is::",subscriptions.status);
-                  subscriptionId = _.first(subscriptions).id;
+
+                  if (_.isEmpty(subscriptions))
+                    logger.warn('No subscriptions found, skipping subsequent ' +
+                      'testcases');
+                  else
+                    subscriptionId = _.first(subscriptions).id;
+
                   nconf.set('shiptest-GITHUB_ORG_1:subscriptionId', subscriptionId);
                   nconf.save(function (err) {
                     if (err)
@@ -93,6 +99,8 @@ describe('Enable Project',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
+
+            if (!projectId) return done();
 
             var body = {
               projectId: projectId,

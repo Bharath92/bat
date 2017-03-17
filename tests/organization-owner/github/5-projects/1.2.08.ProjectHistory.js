@@ -30,6 +30,8 @@ describe('Project History',
           function (done) {
             this.timeout(0);
             projectId = nconf.get('shiptest-GITHUB_ORG_1:projectId');
+            if (!projectId) return done();
+
             shippable = new Shippable(config.apiToken);
             shippable.getProjectById(projectId,
               function (err, proj) {
@@ -84,6 +86,8 @@ describe('Project History',
         it('Trigger new build request',
           function (done) {
             this.timeout(0);
+            if (!run) return done();
+
             var payload = {
               runId: run.id
             };
@@ -111,6 +115,8 @@ describe('Project History',
         it('Get RunsById',
           function (done) {
             this.timeout(0);
+            if (!run) return done();
+
             var query = util.format('runIds=%s', run.id);
             shippable.getRuns(query,
               function(err, runs) {
@@ -127,7 +133,8 @@ describe('Project History',
                   if (runs.status<200 || runs.status>=299)
                     logger.warn('status is::',runs.status);
                   run = _.first(runs);
-                  runId = run.id;
+                  if (run)
+                    runId = run.id;
                   return done();
                 }
               }
@@ -138,6 +145,8 @@ describe('Project History',
         it('Delete Run',
           function (done) {
             this.timeout(0);
+            if (!runId) return done();
+
             shippable.deleteRunById(runId,
               function (err) {
                 if (err) {
@@ -161,6 +170,9 @@ describe('Project History',
         it('Trigger new build request',
           function (done) {
             this.timeout(0);
+            if (!run) return done();
+            if (!projectId) return done();
+
             var payload = {
               runId: run.id
             };
@@ -212,6 +224,8 @@ describe('Project History',
         it('Get Runs',
           function (done) {
             this.timeout(0);
+            if (!runId) return done();
+
             var bag = {
               runId : runId,
               isStatusCompleted: false

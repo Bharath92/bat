@@ -79,9 +79,11 @@ describe('Home Dashboard',
                   return done();
                 } else {
                   project = _.first(projects);
-                  providerId = project.providerId;
-                  branches = project.branches;
-                  projectId = project.id;
+                  if (project){
+                    providerId = project.providerId;
+                    branches = project.branches;
+                    projectId = project.id;
+                  }
                   logger.debug('Fetched projects successfully');
                   return done();
                 }
@@ -93,6 +95,8 @@ describe('Home Dashboard',
         it('Get Provider',
           function (done) {
             this.timeout(0);
+            if (!providerId) return done();
+
             shippable.getProviderById(providerId,
               function (err) {
                 if (err) {
@@ -116,6 +120,8 @@ describe('Home Dashboard',
         it('Get Run Status By accountId',
           function (done) {
             this.timeout(0);
+            if (!accountId) return done();
+
             var query = 'isGitTag=false';
             shippable.getRunStatusByAccountId(accountId, query,
               function (err) {

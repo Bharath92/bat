@@ -57,6 +57,8 @@ describe('Subscriptions Dashboard',
         it('Get Run Status By SubscriptionId',
           function (done) {
             this.timeout(0);
+            if (!subscriptionId) return done();
+
             var shippable = new Shippable(config.apiToken);
             var query = 'type=ci&isGitTag=false';
             shippable.getRunStatusBySubscriptionId(subscriptionId, query,
@@ -72,7 +74,8 @@ describe('Subscriptions Dashboard',
                   return done();
                 } else {
                   run = _.first(runs);
-                  runId = run.id;
+                  if (run)
+                    runId = run.id;
                   logger.debug('Fetched run status By SubscriptionId: '+ subscriptionId);
                   return done();
                 }
@@ -84,6 +87,8 @@ describe('Subscriptions Dashboard',
         it('Trigger New Build',
           function (done) {
             this.timeout(0);
+            if (!run) return done();
+
             var shippable = new Shippable(config.apiToken);
             var projectId = run.projectId;
             var payload = {
@@ -143,6 +148,8 @@ describe('Subscriptions Dashboard',
           function (done) {
             var shippable = new Shippable(config.apiToken);
             var project = _.findWhere(projs, {id: run.projectId});
+            if (!project) return done();
+
             if (project.propertyBag && project.propertyBag.dashboardBranchSettings) {
               var dashSettings = project.propertyBag.dashboardBranchSettings;
               var query =util.format('&status=complete&' +
@@ -244,7 +251,8 @@ describe('Subscriptions Dashboard',
                   assert.equal(err, null);
                   return done();
                 } else {
-                  runId = _.first(res).id;
+                  if (!_.isEmpty(res))
+                    runId = _.first(res).id;
                   logger.debug('Fetched run by id for runId:', runId);
                   return done();
                 }
@@ -256,6 +264,8 @@ describe('Subscriptions Dashboard',
         it('Get Run Status By SubId',
           function (done) {
             this.timeout(0);
+            if (!subscriptionId) return done();
+
             var shippable = new Shippable(config.apiToken);
             var query = 'type=ci&isGitTag=false&status=complete';
             shippable.getRunStatusBySubscriptionId(subscriptionId, query,
@@ -272,7 +282,8 @@ describe('Subscriptions Dashboard',
                   return done();
                 } else {
                   run = _.first(runs);
-                  runId = run.id;
+                  if (run)
+                    runId = run.id;
                   logger.debug('Fetched Run Status By SubId: '+ subscriptionId);
                   return done();
                 }
