@@ -45,7 +45,7 @@ describe(testSuite,
                 } else {
                   if (_.isEmpty(res)){
                     logger.warn('syncRepo resource is not present');
-                    assert.equal(res, 1);
+                    assert.notEqual(res.length, 0);
                   }
                   resource = _.first(res);
                   return done();

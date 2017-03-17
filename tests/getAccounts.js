@@ -79,7 +79,7 @@ describe(util.format('%s1 - %s', testSuiteNum, testSuiteDesc),
                   if (_.isEmpty(res)) {
                     logger.warn('getAccounts returned no account which is ' +
                       'not expected, hence skipping subsequent test cases');
-                    assert.equal(res, 1);
+                    assert.notEqual(res.length, 0);
                   } else
                     token.id = _.first(res).id;
                   return nextToken();

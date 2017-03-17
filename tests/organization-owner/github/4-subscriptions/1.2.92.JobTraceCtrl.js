@@ -47,7 +47,7 @@ describe(testSuite,
                   if (_.isEmpty(subscriptions)) {
                     logger.warn('No subscriptions found, skipping subsequent ' +
                       'testcases');
-                    assert.equal(subscriptions, 1);
+                    assert.notEqual(subscriptions.length, 0);
                   } else
                     subscriptionId = _.first(subscriptions).id;
 
@@ -178,7 +178,7 @@ function _getResources(bag, done) {
       } else {
         if (_.isEmpty(resources)){
           logger.warn('getResources returned 0 resources');
-          assert.equal(resources, 1);
+          assert.notEqual(resources.length, 0);
         }
         resource = _.first(_.where(resources, {"isJob": true}));
 

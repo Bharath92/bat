@@ -47,7 +47,7 @@ describe('Enable Project',
                   if (_.isEmpty(subscriptions)) {
                     logger.warn('No subscriptions found, skipping subsequent ' +
                       'testcases');
-                    assert.equal(subscriptions, 1);
+                    assert.notEqual(subscriptions.length, 0);
                   } else
                     subscriptionId = _.first(subscriptions).id;
 
@@ -84,7 +84,7 @@ describe('Enable Project',
                   var project = {};
                   if (_.isEmpty(projects)){
                     logger.warn('No Projects found');
-                    assert.equal(projects, 1);
+                    assert.notEqual(projects.length, 0);
                   }
                   project = _.findWhere(projects, {isPrivateRepository: false});
                   projectId = project.id;

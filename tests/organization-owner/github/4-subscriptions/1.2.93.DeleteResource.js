@@ -49,7 +49,7 @@ describe(testSuite,
                   if (_.isEmpty(subscriptions)) {
                     logger.warn('No subscriptions found, skipping subsequent ' +
                       'testcases');
-                    assert.equal(subscriptions, 1);
+                    assert.notEqual(subscriptions.length, 0);
                   } else
                     subscriptionId = _.first(subscriptions).id;
 

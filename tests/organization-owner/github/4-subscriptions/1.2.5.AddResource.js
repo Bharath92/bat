@@ -54,7 +54,7 @@ describe(testSuite,
                   if (_.isEmpty(subscriptions)) {
                     logger.warn('No subscriptions found, skipping subsequent ' +
                       'testcases');
-                    assert.equal(subscriptions, 1);
+                    assert.notEqual(subscriptions.length, 0);
                   } else
                     subscriptionId = _.first(subscriptions).id;
 
@@ -86,7 +86,7 @@ describe(testSuite,
                   if (_.isEmpty(gitHubAccntInt)){
                     logger.warn('getAccountIntegrations 0 accInts which is not '
                       + 'expected, hence failing');
-                    assert.equal(gitHubAccntInt, 1);
+                    assert.notEqual(gitHubAccntInt.length, 0);
                   }
                   return done();
                 }
@@ -184,7 +184,7 @@ describe(testSuite,
                   var project = {};
                   if (_.isEmpty(projects)){
                     logger.warn('projects are empty, which is not expected');
-                    assert.equal(projects, 1);
+                    assert.notEqual(projects.length, 0);
                   }
                   project = _.findWhere(projects, {isPrivateRepository: false});
                   if (project)
@@ -302,7 +302,7 @@ describe(testSuite,
                 } else {
                   if (_.isEmpty(res)){
                     logger.warn('getResources returned 0 resources');
-                    assert.equal(res, 1);
+                    assert.notEqual(res.length, 0);
                   }
                   logger.debug("Successfully Got Resources");
                   return done();
