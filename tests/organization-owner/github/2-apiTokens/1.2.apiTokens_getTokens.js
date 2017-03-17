@@ -60,6 +60,8 @@ describe(testSuite,
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
 
+            if (_.isEmpty(apiTokenIds)) return done();
+
             async.each(apiTokenIds,
               function(tokenId, nextTokenId) {
                 shippable.deleteAccountToken(tokenId,

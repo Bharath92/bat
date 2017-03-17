@@ -41,6 +41,10 @@ describe(testSuite,
                   assert.equal(err, null);
                   return done();
                 } else {
+                  if (_.isEmpty(res)){
+                    logger.warn('syncRepo resource is not present');
+                    assert.notEqual(res.length, 0);
+                  }
                   resource = _.first(res);
                   return done();
                 }
@@ -53,6 +57,7 @@ describe(testSuite,
           function (done) {
             this.timeout(0);
 
+            if (!resource) return done();
             var query = util.format(
               'resourceIds=%s&subscriptionIds=%s&sortBy=id&limit=1', resource.id,
               resource.subscriptionId);

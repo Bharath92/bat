@@ -12,6 +12,7 @@ var Shippable = require('../../../../_common/shippable/Adapter.js');
 
 var testSuite = util.format('%s2_sync_accountByid - %s',
                   testSuiteNum, testSuiteDesc);
+var accountId = '';
 
 describe(testSuite,
   function () {
@@ -20,8 +21,11 @@ describe(testSuite,
       function (done) {
         this.timeout(0);
         var shippable = new Shippable(config.apiToken);
+        accountId = nconf.get("shiptest-github-owner:accountId");
+        if (!accountId) return done();
+
         shippable.forceSyncAccountById(
-          nconf.get("shiptest-github-owner:accountId"),
+          accountId,
           function(err, res) {
             if (err) {
               var bag = {

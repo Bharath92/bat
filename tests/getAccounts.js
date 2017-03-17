@@ -75,7 +75,13 @@ describe(util.format('%s1 - %s', testSuiteNum, testSuiteDesc),
                   logger.debug('res is::', util.inspect(res,{depth:null}));
                   if (res.status<200 || res.status>=299)
                     logger.warn('status is::',res.status);
-                  token.id = _.first(res).id;
+
+                  if (_.isEmpty(res)) {
+                    logger.warn('getAccounts returned no account which is ' +
+                      'not expected, hence skipping subsequent test cases');
+                    assert.notEqual(res.length, 0);
+                  } else
+                    token.id = _.first(res).id;
                   return nextToken();
                 }
               }

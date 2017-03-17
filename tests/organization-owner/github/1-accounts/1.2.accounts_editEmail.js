@@ -15,6 +15,8 @@ var testSuite = util.format('%s.accounts_editEmail - %s', testSuiteNum,
 
 var isTestFailed = false;
 var testCaseErrors = [];
+var accountId = '';
+
 describe('Edit email with valid and invalid email address',
   function () {
 
@@ -25,8 +27,11 @@ describe('Edit email with valid and invalid email address',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(global.config.apiToken);
+            accountId = nconf.get('shiptest-github-owner:accountId');
+            if (!accountId) return done();
+
             shippable.putAccountById(
-              nconf.get('shiptest-github-owner:accountId'),
+              accountId,
               '', { defaultEmail : 'test@gmail.com' },
               function(err) {
                 if (err) {
@@ -50,9 +55,10 @@ describe('Edit email with valid and invalid email address',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(global.config.apiToken);
+            if (!accountId) return done();
 
             shippable.putAccountById(
-              nconf.get('shiptest-github-owner:accountId'),
+              accountId,
               '', { defaultEmail : 'test.testt@gmail.com' },
               function(err) {
                 if (err) {
@@ -76,9 +82,10 @@ describe('Edit email with valid and invalid email address',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(global.config.apiToken);
+            if (!accountId) return done();
 
             shippable.putAccountById(
-              nconf.get('shiptest-github-owner:accountId'),
+              accountId,
               '', { defaultEmail : 'test@google.co.in' },
               function(err) {
                 if (err) {
@@ -102,9 +109,10 @@ describe('Edit email with valid and invalid email address',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(global.config.apiToken);
+            if (!accountId) return done();
 
             shippable.putAccountById(
-              nconf.get('shiptest-github-owner:accountId'),
+              accountId,
               '', { defaultEmail : 'test+test@google.co.in' },
               function(err) {
                 if (err) {
@@ -128,9 +136,10 @@ describe('Edit email with valid and invalid email address',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(global.config.apiToken);
+            if (!accountId) return done();
 
             shippable.putAccountById(
-              nconf.get('shiptest-github-owner:accountId'),
+              accountId,
               '', { defaultEmail : '\"test"\@gmail.com' },
               function(err) {
                 if (err) {
@@ -154,9 +163,10 @@ describe('Edit email with valid and invalid email address',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(global.config.apiToken);
+            if (!accountId) return done();
 
             shippable.putAccountById(
-              nconf.get('shiptest-github-owner:accountId'),
+              accountId,
               '', { defaultEmail : 'test12345@gmail.com' },
               function(err) {
                 if (err) {
@@ -180,9 +190,10 @@ describe('Edit email with valid and invalid email address',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(global.config.apiToken);
+            if (!accountId) return done();
 
             shippable.putAccountById(
-              nconf.get('shiptest-github-owner:accountId'),
+              accountId,
               '', { defaultEmail : 'test12345@google-co.in' },
               function(err) {
                 if (err) {
@@ -206,9 +217,10 @@ describe('Edit email with valid and invalid email address',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(global.config.apiToken);
+            if (!accountId) return done();
 
             shippable.putAccountById(
-              nconf.get('shiptest-github-owner:accountId'),
+              accountId,
               '', { defaultEmail : 'test_12345@yahoo.in' },
               function(err) {
                 if (err) {
@@ -232,9 +244,10 @@ describe('Edit email with valid and invalid email address',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(global.config.apiToken);
+            if (!accountId) return done();
 
             shippable.putAccountById(
-              nconf.get('shiptest-github-owner:accountId'),
+              accountId,
               '', { defaultEmail : 'test_12345@rediff.mail' },
               function(err) {
                 if (err) {
@@ -258,9 +271,10 @@ describe('Edit email with valid and invalid email address',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(global.config.apiToken);
+            if (!accountId) return done();
 
             shippable.putAccountById(
-              nconf.get('shiptest-github-owner:accountId'),
+              accountId,
               '', { defaultEmail : 'test_1234@google.co.in' },
               function(err) {
                 if (err) {
@@ -284,9 +298,10 @@ describe('Edit email with valid and invalid email address',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(global.config.apiToken);
+            if (!accountId) return done();
 
             shippable.putAccountById(
-              nconf.get('shiptest-github-owner:accountId'),
+              accountId,
               '', { defaultEmail : 'あいうえお@domain.com' },
               function(err) {
                 if (err) {
@@ -310,9 +325,10 @@ describe('Edit email with valid and invalid email address',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(global.config.apiToken);
+            if (!accountId) return done();
 
             shippable.putAccountById(
-              nconf.get('shiptest-github-owner:accountId'),
+              accountId,
               '', { defaultEmail : 'email@domain.web' },
               function(err) {
                 if (err) {
@@ -336,9 +352,10 @@ describe('Edit email with valid and invalid email address',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(global.config.apiToken);
+            if (!accountId) return done();
 
             shippable.putAccountById(
-              nconf.get('shiptest-github-owner:accountId'),
+              accountId,
               '', { defaultEmail : 'test-1234@google.co.in' },
               function(err) {
                 if (err) {
@@ -368,9 +385,10 @@ describe('Edit email with valid and invalid email address',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(global.config.apiToken);
+            if (!accountId) return done();
 
             shippable.putAccountById(
-              nconf.get('shiptest-github-owner:accountId'),
+              accountId,
               '', { defaultEmail : 'plainaddress' },
               function(err) {
                 if (err) {
@@ -396,9 +414,10 @@ describe('Edit email with valid and invalid email address',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(global.config.apiToken);
+            if (!accountId) return done();
 
             shippable.putAccountById(
-              nconf.get('shiptest-github-owner:accountId'),
+              accountId,
               '', { defaultEmail : 'test+testing@123.123.123.123' },
               function(err) {
                 if (err) {
@@ -425,9 +444,10 @@ describe('Edit email with valid and invalid email address',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(global.config.apiToken);
+            if (!accountId) return done();
 
             shippable.putAccountById(
-              nconf.get('shiptest-github-owner:accountId'),
+              accountId,
               '', { defaultEmail : 'test+testing@[123.123.123.123]' },
               function(err) {
                 if (err) {
@@ -455,9 +475,10 @@ describe('Edit email with valid and invalid email address',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(global.config.apiToken);
+            if (!accountId) return done();
 
             shippable.putAccountById(
-              nconf.get('shiptest-github-owner:accountId'),
+              accountId,
               '', { defaultEmail : '#@%^%#$@#$@#.com' },
               function(err) {
                 if (err) {
@@ -482,9 +503,10 @@ describe('Edit email with valid and invalid email address',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(global.config.apiToken);
+            if (!accountId) return done();
 
             shippable.putAccountById(
-              nconf.get('shiptest-github-owner:accountId'),
+              accountId,
               '', { defaultEmail : '@domain.com' },
               function(err) {
                 if (err) {
@@ -509,9 +531,10 @@ describe('Edit email with valid and invalid email address',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(global.config.apiToken);
+            if (!accountId) return done();
 
             shippable.putAccountById(
-              nconf.get('shiptest-github-owner:accountId'),
+              accountId,
               '', { defaultEmail : 'Joe Smith <email@domain.com>' },
               function(err) {
                 if (err) {
@@ -537,9 +560,10 @@ describe('Edit email with valid and invalid email address',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(global.config.apiToken);
+            if (!accountId) return done();
 
             shippable.putAccountById(
-              nconf.get('shiptest-github-owner:accountId'),
+              accountId,
               '', { defaultEmail : 'email.domain.com' },
               function(err) {
                 if (err) {
@@ -564,9 +588,10 @@ describe('Edit email with valid and invalid email address',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(global.config.apiToken);
+            if (!accountId) return done();
 
             shippable.putAccountById(
-              nconf.get('shiptest-github-owner:accountId'),
+              accountId,
               '', { defaultEmail : 'email@domain@domain.com' },
               function(err) {
                 if (err) {
@@ -592,9 +617,10 @@ describe('Edit email with valid and invalid email address',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(global.config.apiToken);
+            if (!accountId) return done();
 
             shippable.putAccountById(
-              nconf.get('shiptest-github-owner:accountId'),
+              accountId,
               '', { defaultEmail : '.email@domain.com' },
               function(err) {
                 if (err) {
@@ -619,9 +645,10 @@ describe('Edit email with valid and invalid email address',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(global.config.apiToken);
+            if (!accountId) return done();
 
             shippable.putAccountById(
-              nconf.get('shiptest-github-owner:accountId'),
+              accountId,
               '', { defaultEmail : 'email.@domain.com' },
               function(err) {
                 if (err) {
@@ -646,9 +673,10 @@ describe('Edit email with valid and invalid email address',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(global.config.apiToken);
+            if (!accountId) return done();
 
             shippable.putAccountById(
-              nconf.get('shiptest-github-owner:accountId'),
+              accountId,
               '', { defaultEmail : 'email..email@domain.com' },
               function(err) {
                 if (err) {
@@ -674,9 +702,10 @@ describe('Edit email with valid and invalid email address',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(global.config.apiToken);
+            if (!accountId) return done();
 
             shippable.putAccountById(
-              nconf.get('shiptest-github-owner:accountId'),
+              accountId,
               '', { defaultEmail : 'email@domain.com (Joe Smith)' },
               function(err) {
                 if (err) {
@@ -702,9 +731,10 @@ describe('Edit email with valid and invalid email address',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(global.config.apiToken);
+            if (!accountId) return done();
 
             shippable.putAccountById(
-              nconf.get('shiptest-github-owner:accountId'),
+              accountId,
               '', { defaultEmail : 'email@domain' },
               function(err) {
                 if (err) {
@@ -729,9 +759,10 @@ describe('Edit email with valid and invalid email address',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(global.config.apiToken);
+            if (!accountId) return done();
 
             shippable.putAccountById(
-              nconf.get('shiptest-github-owner:accountId'),
+              accountId,
               '', { defaultEmail : 'email@-domain.com' },
               function(err) {
                 if (err) {
@@ -756,9 +787,10 @@ describe('Edit email with valid and invalid email address',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(global.config.apiToken);
+            if (!accountId) return done();
 
             shippable.putAccountById(
-              nconf.get('shiptest-github-owner:accountId'),
+              accountId,
               '', { defaultEmail : 'email@111.222.333.44444' },
               function(err) {
                 if (err) {
@@ -784,9 +816,10 @@ describe('Edit email with valid and invalid email address',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(global.config.apiToken);
+            if (!accountId) return done();
 
             shippable.putAccountById(
-              nconf.get('shiptest-github-owner:accountId'),
+              accountId,
               '', { defaultEmail : 'email@domain..com' },
               function(err) {
                 if (err) {
@@ -816,9 +849,10 @@ describe('Edit email with valid and invalid email address',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(global.config.apiToken);
+            if (!accountId) return done();
 
             shippable.putAccountById(
-              nconf.get('shiptest-github-owner:accountId'),
+              accountId,
               '', { defaultEmail : 'shippabletowner+sub-o-org-o@gmail.com' },
               function(err) {
                 if (err) {

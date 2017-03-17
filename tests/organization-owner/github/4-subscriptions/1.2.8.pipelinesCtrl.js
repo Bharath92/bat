@@ -47,10 +47,11 @@ describe(testSuite,
                   if (subscriptions.status<200 || subscriptions.status>=299)
                     logger.warn("status is::",subscriptions.status);
 
-                  if (_.isEmpty(subscriptions))
+                  if (_.isEmpty(subscriptions)) {
                     logger.warn('No subscriptions found, skipping subsequent ' +
                       'testcases');
-                  else
+                    assert.notEqual(subscriptions.length, 0);
+                  } else
                     subscriptionId = _.first(subscriptions).id;
 
                   return done();
@@ -105,6 +106,10 @@ describe(testSuite,
                   assert.equal(err, null);
                   return done();
                 } else {
+                  if (_.isEmpty(resources)){
+                    logger.warn('getResources returned 0 resources');
+                    assert.notEqual(resources.length, 0);
+                  }
                   jobsVm = _.where(resources, {"isJob": true});
                   resourcesVm = _.where(resources, {"isJob": false});
                   resourcesById = _.indexBy(resources, 'id');
@@ -240,6 +245,7 @@ describe(testSuite,
           function (done) {
             this.timeout(0);
 
+            if (_.isEmpty(resourcesVm)) return done();
             async.each(resourcesVm,
               function (resource, nextResource) {
                 var query = util.format('resourceIds=%s&sortBy=id&limit=1',
@@ -273,7 +279,7 @@ describe(testSuite,
 
             var query = util.format('subscriptionIds=%s',subscriptionId);
             shippable.getProjects(query,
-              function (err) {
+              function (err, projs) {
                 if (err) {
                   isTestFailed = true;
                   var testCase =
@@ -282,6 +288,11 @@ describe(testSuite,
                       testSuiteDesc, err);
                   testCaseErrors.push(testCase);
                   assert.equal(err, null);
+                  return done();
+                }
+                if (_.isEmpty(projs)) {
+                  logger.warn('No projects found');
+                  assert.notEqual(projs.length, 0);
                 }
                 return done();
               }
