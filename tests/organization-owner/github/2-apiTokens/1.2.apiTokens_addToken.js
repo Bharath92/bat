@@ -24,6 +24,8 @@ describe('Add Tokens with different name',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
+            if (!ownerAccountId) return done();
+
             var name = "Q6sW4LKREx20/Zw0g5Mpr6gJeZWzIsu2f6t3jJ4/sDGVu7PMWqFD" +
                          "v4KAGF97Tc9BE/5/LJ+D5SVSdHdY2oe7cwQrblqWA79riC8yS1c" +
                          "6Le27bGMjoqBSs7Opdd99C+SwdS1G1KDzq39eKXhXyoIM7q";
@@ -50,6 +52,8 @@ describe('Add Tokens with different name',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
+            if (!ownerAccountId) return done();
+
             var name = "Q6sW4LKREx20/Zw0g5Mpr6gJeZWzIsu2f6t3jJ4/sDGVu7PMWqFDv" +
                          "4KAGF97Tc9BE/5/LJ+D5SVSdHdY2oe7cwQrblqWA79riC8yS1c6" +
                          "Le27bGMjoqBSs7Opdd99C+SwdS1G1KDzq39eKX";
@@ -76,6 +80,8 @@ describe('Add Tokens with different name',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
+            if (!ownerAccountId) return done();
+
             var name = "abcABC";
             shippable.postAccountTokens(name, ownerAccountId,
               function(err) {
@@ -100,6 +106,8 @@ describe('Add Tokens with different name',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
+            if (!ownerAccountId) return done();
+
             var name = "1234567890";
             shippable.postAccountTokens(name, ownerAccountId,
               function(err) {
@@ -125,6 +133,8 @@ describe('Add Tokens with different name',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
+            if (!ownerAccountId) return done();
+
             var name = "!@#$%^&()";
             shippable.postAccountTokens(name, ownerAccountId,
               function(err) {
@@ -150,6 +160,8 @@ describe('Add Tokens with different name',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
+            if (!ownerAccountId) return done();
+
             var name = "12345678qwertyuio";
             shippable.postAccountTokens(name, ownerAccountId,
               function(err) {
@@ -175,6 +187,8 @@ describe('Add Tokens with different name',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
+            if (!ownerAccountId) return done();
+
             var name = "  aa    bb  ccc";
             shippable.postAccountTokens(name, ownerAccountId,
               function(err) {
@@ -200,6 +214,8 @@ describe('Add Tokens with different name',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
+            if (!ownerAccountId) return done();
+
             var name = "@#test&*(123";
             shippable.postAccountTokens(name, ownerAccountId,
               function(err) {
@@ -230,6 +246,8 @@ describe('Add Tokens with different name',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
+            if (!ownerAccountId) return done();
+
             var name = "Q6sW4LKREx20/Zw0g5Mpr6gJeZWzIsu2f6t3jJ4/sDGVu7PMWqFD" +
                        "v4KAGF97Tc9BE/5/LJ+D5SVSdHdY2oe7cwQrblqWA79riC8yS1c6L" +
                        "e27bGMjoqBSs7Opdd99C+SwdS1G1KDzq39eKXhXyoIM7q123456";
@@ -257,6 +275,8 @@ describe('Add Tokens with different name',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
+            if (!ownerAccountId) return done();
+
             var name = "abcABC";
             shippable.postAccountTokens(name, ownerAccountId,
               function(err) {

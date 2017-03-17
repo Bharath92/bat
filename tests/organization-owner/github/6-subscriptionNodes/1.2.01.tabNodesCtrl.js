@@ -46,7 +46,14 @@ describe(testSuite,
                 } else {
                   if (subscriptions.status<200 || subscriptions.status>=299)
                     logger.warn("status is::",subscriptions.status);
-                  subscriptionId = _.first(subscriptions).id;
+
+                  if (_.isEmpty(subscriptions)) {
+                    logger.warn('No subscriptions found, skipping subsequent ' +
+                      'testcases');
+                    assert.equal(subscriptions, 1);
+                  } else
+                    subscriptionId = _.first(subscriptions).id;
+
                   return done();
                 }
               }
@@ -57,6 +64,8 @@ describe(testSuite,
         it('get Subscription State By Id',
           function (done) {
             this.timeout(0);
+
+            if (!subscriptionId) return done();
 
             shippable.getSubscriptionStateById(subscriptionId,
               function(err, subscriptionState) {
@@ -168,6 +177,7 @@ describe(testSuite,
           function (done) {
             this.timeout(0);
             if (!hostChangeAllowed) return done();
+            if (!subscriptionId) return done();
 
             var update = {};
 

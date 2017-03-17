@@ -51,10 +51,11 @@ describe(testSuite,
                   if (subscriptions.status<200 || subscriptions.status>=299)
                     logger.warn("status is::",subscriptions.status);
 
-                  if (_.isEmpty(subscriptions))
+                  if (_.isEmpty(subscriptions)) {
                     logger.warn('No subscriptions found, skipping subsequent ' +
                       'testcases');
-                  else
+                    assert.equal(subscriptions, 1);
+                  } else
                     subscriptionId = _.first(subscriptions).id;
 
                   return done();
@@ -82,6 +83,11 @@ describe(testSuite,
                   return done();
                 } else {
                   gitHubAccntInt = _.first(accInts);
+                  if (_.isEmpty(gitHubAccntInt)){
+                    logger.warn('getAccountIntegrations 0 accInts which is not '
+                      + 'expected, hence failing');
+                    assert.equal(gitHubAccntInt, 1);
+                  }
                   return done();
                 }
               }
@@ -176,6 +182,10 @@ describe(testSuite,
                   return done();
                 } else {
                   var project = {};
+                  if (_.isEmpty(projects)){
+                    logger.warn('projects are empty, which is not expected');
+                    assert.equal(projects, 1);
+                  }
                   project = _.findWhere(projects, {isPrivateRepository: false});
                   if (project)
                     projectId = project.id;
@@ -290,6 +300,10 @@ describe(testSuite,
                   assert.equal(err, null);
                   return done();
                 } else {
+                  if (_.isEmpty(res)){
+                    logger.warn('getResources returned 0 resources');
+                    assert.equal(res, 1);
+                  }
                   logger.debug("Successfully Got Resources");
                   return done();
                 }

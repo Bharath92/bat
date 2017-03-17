@@ -44,6 +44,9 @@ describe(util.format('%s1 - %s', testSuiteNum, testSuiteDesc),
         }
         async.each(accountIds,
           function(accountObj, nextObj) {
+            if (!accountObj.id) return nextObj();
+            if (!accountObj.apiToken) return nextObj();
+
             var shippable = new Shippable(accountObj.apiToken);
             shippable.deleteAccountById(accountObj.id,
               function(err, res) {

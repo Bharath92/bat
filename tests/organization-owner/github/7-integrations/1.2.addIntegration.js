@@ -41,7 +41,13 @@ describe('Add Integrations',
                 } else {
                   if (subscriptions.status<200 || subscriptions.status>=299)
                     logger.warn("status is::",subscriptions.status);
-                  subscriptionId = _.first(subscriptions).id;
+
+                  if (_.isEmpty(subscriptions)) {
+                    logger.warn('No subscriptions found, skipping subsequent ' +
+                      'testcases');
+                    assert.equal(subscriptions, 1);
+                  } else
+                    subscriptionId = _.first(subscriptions).id;
                   return done();
                 }
               }
@@ -1175,6 +1181,9 @@ describe('Add Integrations',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
+            if (!subscriptionId) return done();
+            if (_.isEmpty(accountIntegrations)) return done();
+
             async.each(accountIntegrations,
               function (accInt, nextAccInt) {
                 var body = {

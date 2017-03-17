@@ -44,10 +44,11 @@ describe('Enable Project',
                   if (subscriptions.status<200 || subscriptions.status>=299)
                     logger.warn("status is::",subscriptions.status);
 
-                  if (_.isEmpty(subscriptions))
+                  if (_.isEmpty(subscriptions)) {
                     logger.warn('No subscriptions found, skipping subsequent ' +
                       'testcases');
-                  else
+                    assert.equal(subscriptions, 1);
+                  } else
                     subscriptionId = _.first(subscriptions).id;
 
                   nconf.set('shiptest-GITHUB_ORG_1:subscriptionId', subscriptionId);
@@ -81,6 +82,10 @@ describe('Enable Project',
                   return done();
                 } else {
                   var project = {};
+                  if (_.isEmpty(projects)){
+                    logger.warn('No Projects found');
+                    assert.equal(projects, 1);
+                  }
                   project = _.findWhere(projects, {isPrivateRepository: false});
                   projectId = project.id;
                   nconf.set('shiptest-GITHUB_ORG_1:projectId',projectId);

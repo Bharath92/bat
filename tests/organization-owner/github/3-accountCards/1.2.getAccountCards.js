@@ -61,6 +61,8 @@ describe(testSuite,
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
 
+            if (_.isEmpty(accountCardIds)) return done();
+
             async.each(accountCardIds,
               function(accountCardId, nextAccountCardId) {
                 shippable.deleteAccountCardById(accountCardId,

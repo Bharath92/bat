@@ -43,7 +43,13 @@ describe(testSuite,
                 } else {
                   if (subscriptions.status<200 || subscriptions.status>=299)
                     logger.warn("status is::",subscriptions.status);
-                  subscriptionId = _.first(subscriptions).id;
+
+                  if (_.isEmpty(subscriptions)) {
+                    logger.warn('No subscriptions found, skipping subsequent ' +
+                      'testcases');
+                    assert.equal(subscriptions, 1);
+                  } else
+                    subscriptionId = _.first(subscriptions).id;
                   return done();
                 }
               }

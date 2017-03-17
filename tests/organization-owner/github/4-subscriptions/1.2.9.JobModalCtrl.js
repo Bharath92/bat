@@ -51,10 +51,11 @@ describe(testSuite,
                   if (subscriptions.status<200 || subscriptions.status>=299)
                     logger.warn("status is::",subscriptions.status);
 
-                  if (_.isEmpty(subscriptions))
+                  if (_.isEmpty(subscriptions)) {
                     logger.warn('No subscriptions found, skipping subsequent ' +
                       'testcases');
-                  else
+                    assert.equal(subscriptions, 1);
+                  } else
                     subscriptionId = _.first(subscriptions).id;
 
                   return done();
@@ -82,6 +83,10 @@ describe(testSuite,
                   assert.equal(err, null);
                   return done();
                 } else {
+                  if (_.isEmpty(resources)){
+                    logger.warn('getResources returned 0 resources');
+                    assert.equal(resources, 1);
+                  }
                   jobsVm = _.where(resources, {"isJob": true});
                   return done();
                 }
