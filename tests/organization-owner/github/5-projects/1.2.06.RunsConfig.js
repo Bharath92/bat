@@ -30,6 +30,8 @@ describe('Project RunsConfig',
           function (done) {
             this.timeout(0);
             projectId = nconf.get('shiptest-GITHUB_ORG_1:projectId');
+            if (!projectId) return done();
+
             shippable = new Shippable(config.apiToken);
             shippable.getProjectOwnerAccounts(projectId,
               function (err) {
@@ -54,8 +56,11 @@ describe('Project RunsConfig',
         it('Set OwnerAccountIdWorkflow',
           function (done) {
             this.timeout(0);
-            projectId = nconf.get('shiptest-GITHUB_ORG_1:projectId');
             accountId = nconf.get('shiptest-github-owner:accountId');
+
+            if (!projectId) return done();
+            if (!accountId) return done();
+
             var update = {
               ownerAccountId: accountId,
               builderAccountId: accountId
@@ -83,7 +88,9 @@ describe('Project RunsConfig',
         it('Automate Low Coverage Alert for value 10',
           function (done) {
             this.timeout(0);
-            projectId = nconf.get('shiptest-GITHUB_ORG_1:projectId');
+
+            if (!projectId) return done();
+
             var update = {
               propertyBag: {
                 lowCoverageLimit: 10,
@@ -113,6 +120,8 @@ describe('Project RunsConfig',
         it('Automate Low Coverage Alert for value 50',
           function (done) {
             this.timeout(0);
+            if (!projectId) return done();
+
             var update = {
               propertyBag: {
                 lowCoverageLimit: 50,
@@ -142,6 +151,8 @@ describe('Project RunsConfig',
         it('Automate Low Coverage Alert for value 99',
           function (done) {
             this.timeout(0);
+            if (!projectId) return done();
+
             var update = {
               propertyBag: {
                 lowCoverageLimit: 99,
@@ -171,6 +182,8 @@ describe('Project RunsConfig',
         it('Automate Low Coverage Alert for value 40',
           function (done) {
             this.timeout(0);
+            if (!projectId) return done();
+
             var update = {
               propertyBag: {
                 lowCoverageLimit: 40,
@@ -200,7 +213,9 @@ describe('Project RunsConfig',
         it('Custom Timeout for valid value 10 mins (600000 ms)',
           function (done) {
             this.timeout(0);
-            projectId = nconf.get("shiptest-GITHUB_ORG_1:projectId");
+
+            if (!projectId) return done();
+
             var update = {
               propertyBag: {
                 timeoutMS: 600000
@@ -229,6 +244,8 @@ describe('Project RunsConfig',
         it('Custom Timeout for valid value 10.5 mins (630000 ms)',
           function (done) {
             this.timeout(0);
+            if (!projectId) return done();
+
             var update = {
               propertyBag: {
                 timeoutMS: 630000
@@ -256,6 +273,9 @@ describe('Project RunsConfig',
 
         it('Custom Timeout for invalid value 10000000 ms',
           function (done) {
+            this.timeout(0);
+            if (!projectId) return done();
+
             var update = {
               propertyBag: {
                 timeoutMS: 10000000
@@ -285,6 +305,9 @@ describe('Project RunsConfig',
 
         it('Custom Timeout for invalid value ee',
           function (done) {
+            this.timeout(0);
+            if (!projectId) return done();
+
             var update = {
               propertyBag: {
                 timeoutMS: 'ee'
@@ -314,6 +337,9 @@ describe('Project RunsConfig',
 
         it('Custom Timeout for invalid value 0 ms',
           function (done) {
+            this.timeout(0);
+            if (!projectId) return done();
+
             var update = {
               propertyBag: {
                 timeoutMS: 0
@@ -344,7 +370,8 @@ describe('Project RunsConfig',
         it('Disable Run Parallel Jobs',
           function (done) {
             this.timeout(0);
-            projectId = nconf.get('shiptest-GITHUB_ORG_1:projectId');
+            if (!projectId) return done();
+
             var update = {
               propertyBag: {
                 serialize: false
@@ -372,6 +399,9 @@ describe('Project RunsConfig',
 
         it('Enable Run Parallel Jobs',
           function (done) {
+            this.timeout(0);
+            if (!projectId) return done();
+
             var update = {
               propertyBag: {
                 serialize: true
@@ -400,7 +430,8 @@ describe('Project RunsConfig',
         it('Enable Consolidate Reports',
           function (done) {
             this.timeout(0);
-            projectId = nconf.get('shiptest-GITHUB_ORG_1:projectId');
+            if (!projectId) return done();
+
             var update = {
               consolidateReports: true
             };
@@ -426,6 +457,9 @@ describe('Project RunsConfig',
 
         it('Disable Consolidate Reports',
           function (done) {
+            this.timeout(0);
+            if (!projectId) return done();
+
             var update = {
               consolidateReports: false
             };
@@ -453,7 +487,8 @@ describe('Project RunsConfig',
         it('Enable PullRequestBuilds',
           function (done) {
             this.timeout(0);
-            projectId = nconf.get('shiptest-GITHUB_ORG_1:projectId');
+            if (!projectId) return done();
+
             var update = {
               propertyBag: {
                 enablePullRequestBuild: true
@@ -481,6 +516,9 @@ describe('Project RunsConfig',
 
         it('Disable PullRequestBuilds',
           function (done) {
+            this.timeout(0);
+            if (!projectId) return done();
+
             var update = {
               propertyBag: {
                 enablePullRequestBuild: false
@@ -509,7 +547,8 @@ describe('Project RunsConfig',
         it('Enable CommitBuilds',
           function (done) {
             this.timeout(0);
-            projectId = nconf.get('shiptest-GITHUB_ORG_1:projectId');
+            if (!projectId) return done();
+
             var update = {
               propertyBag: {
                 enableCommitBuild: true
@@ -537,6 +576,9 @@ describe('Project RunsConfig',
 
         it('Disable CommitBuilds',
           function (done) {
+            this.timeout(0);
+            if (!projectId) return done();
+
             var update = {
               propertyBag: {
                 enableCommitBuild: false
@@ -565,7 +607,8 @@ describe('Project RunsConfig',
         it('Enable TagBuilds',
           function (done) {
             this.timeout(0);
-            projectId = nconf.get('shiptest-GITHUB_ORG_1:projectId');
+            if (!projectId) return done();
+
             var update = {
               propertyBag: {
                 enableTagBuild: true
@@ -593,6 +636,9 @@ describe('Project RunsConfig',
 
         it('Disable TagBuilds',
           function (done) {
+            this.timeout(0);
+            if (!projectId) return done();
+
             var update = {
               propertyBag: {
                 enableTagBuild: false
@@ -621,7 +667,8 @@ describe('Project RunsConfig',
         it('Clear ProjectTimeout',
           function (done) {
             this.timeout(0);
-            projectId = nconf.get('shiptest-GITHUB_ORG_1:projectId');
+            if (!projectId) return done();
+
             var update = {
               clearTimeoutMS: true
             };
@@ -648,7 +695,8 @@ describe('Project RunsConfig',
         it('Enable Serialization',
           function (done) {
             this.timeout(0);
-            projectId = nconf.get('shiptest-GITHUB_ORG_1:projectId');
+            if (!projectId) return done();
+
             var update = {
               propertyBag: {
                 serialize: true
@@ -676,6 +724,9 @@ describe('Project RunsConfig',
 
         it('Disable Serialization',
           function (done) {
+            this.timeout(0);
+            if (!projectId) return done();
+
             var update = {
               propertyBag: {
                 serialize: false
@@ -704,7 +755,8 @@ describe('Project RunsConfig',
         it('Enable ReleaseBuilds',
           function (done) {
             this.timeout(0);
-            projectId = nconf.get('shiptest-GITHUB_ORG_1:projectId');
+            if (!projectId) return done();
+
             var update = {
               propertyBag: {
                 enableReleaseBuild: true
@@ -732,6 +784,9 @@ describe('Project RunsConfig',
 
         it('Disable ReleaseBuilds',
           function (done) {
+            this.timeout(0);
+            if (!projectId) return done();
+
             var update = {
               propertyBag: {
                 enableReleaseBuild: false
@@ -760,6 +815,8 @@ describe('Project RunsConfig',
         it('Get ProjectsById',
           function (done) {
             this.timeout(0);
+            if (!projectId) return done();
+
             shippable.getProjectById(projectId,
               function (err, proj) {
                 if (err) {
@@ -784,6 +841,9 @@ describe('Project RunsConfig',
 
         it('Add SerializedBranch',
           function (done) {
+            this.timeout(0);
+            if (!projectId) return done();
+
             var update = {
               propertyBag: {
                 serializeBranches: branches
@@ -811,6 +871,9 @@ describe('Project RunsConfig',
 
         it('Remove SerializedBranch',
           function (done) {
+            this.timeout(0);
+            if (!projectId) return done();
+
             var update = {
               propertyBag: {
                 serializeBranches: branches
@@ -838,6 +901,9 @@ describe('Project RunsConfig',
 
         it('SaveBranchFilter',
           function (done) {
+            this.timeout(0);
+            if (!projectId) return done();
+
             var val = {
               branchFilter: branches
             };
@@ -868,6 +934,9 @@ describe('Project RunsConfig',
 
         it('SaveRunFilter for commit only',
           function (done) {
+            this.timeout(0);
+            if (!projectId) return done();
+
             var val = {
               runFilter: 'commit'
             };
@@ -898,6 +967,9 @@ describe('Project RunsConfig',
 
         it('SaveRunFilter for commit and pull requests',
           function (done) {
+            this.timeout(0);
+            if (!projectId) return done();
+
             var val = {
               runFilter: 'all'
             };

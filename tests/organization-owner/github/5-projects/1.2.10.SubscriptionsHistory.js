@@ -31,6 +31,8 @@ describe('Subscription History',
           function (done) {
             this.timeout(0);
             subscriptionId = nconf.get('shiptest-GITHUB_ORG_1:subscriptionId');
+            if (!subscriptionId) return done();
+
             shippable = new Shippable(config.apiToken);
             shippable.getSubscriptionById(subscriptionId,
               function (err, sub) {
@@ -59,6 +61,8 @@ describe('Subscription History',
           function (done) {
             this.timeout(0);
             projectId = nconf.get('shiptest-GITHUB_ORG_1:projectId');
+            if (!projectId) return done();
+
             shippable.getProjectById(projectId,
               function (err, proj) {
                 if (err) {
@@ -112,6 +116,8 @@ describe('Subscription History',
         it('Trigger new build request',
           function (done) {
             this.timeout(0);
+            if (!run) return done();
+
             var payload = {
               runId: run.id
             };
@@ -144,6 +150,8 @@ describe('Subscription History',
         it('Get RunsById',
           function (done) {
             this.timeout(0);
+            if (!run) return done();
+
             var query = util.format('runIds=' + run.id);
             shippable.getRuns(query,
               function(err, runs) {
@@ -160,7 +168,8 @@ describe('Subscription History',
                   if (runs.status<200 || runs.status>=299)
                     logger.warn('status is::',runs.status);
                   run = _.first(runs);
-                  runId = run.id;
+                  if (run)
+                    runId = run.id;
                   return done();
                 }
               }
@@ -171,6 +180,8 @@ describe('Subscription History',
         it('Delete Run',
           function (done) {
             this.timeout(0);
+            if (!runId) return done();
+
             shippable.deleteRunById(runId,
               function (err) {
                 if (err) {

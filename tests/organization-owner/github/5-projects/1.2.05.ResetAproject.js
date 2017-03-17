@@ -28,6 +28,8 @@ describe('Reset in project settings page',
             var shippable = new Shippable(config.apiToken);
 
             projectId = nconf.get("shiptest-GITHUB_ORG_1:projectId");
+            if (!projectId) return done();
+
             shippable.resetProjectById(projectId,
               function (err, resetProj) {
                 if (err || !resetProj) {

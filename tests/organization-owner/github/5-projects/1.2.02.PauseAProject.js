@@ -28,6 +28,8 @@ describe('Pause Project',
           function (done) {
             this.timeout(0);
             projectId = nconf.get("shiptest-GITHUB_ORG_1:projectId");
+            if (!projectId) return done();
+
             var shippable = new Shippable(config.apiToken);
             var update = {
               propertyBag: {
@@ -58,6 +60,8 @@ describe('Pause Project',
           function (done) {
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
+            if (!projectId) return done();
+
             var update = {
               propertyBag: {
                 isPaused: true

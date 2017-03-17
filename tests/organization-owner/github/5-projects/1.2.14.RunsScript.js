@@ -47,7 +47,8 @@ describe('Runs Script',
                   return done();
                 }
                 jobs = res;
-                jobIds = _.pluck(jobs, 'id');
+                if (!_.isEmpty(jobs))
+                  jobIds = _.pluck(jobs, 'id');
                 logger.debug('Fetched jobs By runId: ' + runId);
                 return done();
               }
@@ -58,6 +59,8 @@ describe('Runs Script',
         it('Get Jobs Script',
           function (done) {
             this.timeout(0);
+            if (_.isEmpty(jobIds)) return done();
+
             async.each(jobIds,
               function (jobId, nextJobId) {
                 shippable.getJobById(jobId,

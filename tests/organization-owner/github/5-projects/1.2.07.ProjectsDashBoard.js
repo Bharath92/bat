@@ -25,6 +25,8 @@ describe('Projects Dashboard',
           function (done) {
             this.timeout(0);
             projectId = nconf.get('shiptest-GITHUB_ORG_1:projectId');
+            if (!projectId) return done();
+
             shippable = new Shippable(global.config.apiToken);
             shippable.triggerNewBuildByProjectId(projectId, {},
               function (err, run) {
@@ -96,6 +98,8 @@ describe('Projects Dashboard',
         it('Get branch run status',
           function (done) {
             if (!runId) return done();
+            if (!projectId) return done();
+
             var query = 'isGitTag=false';
             shippable.getBranchStatusByProjectId(projectId, query,
               function (err) {

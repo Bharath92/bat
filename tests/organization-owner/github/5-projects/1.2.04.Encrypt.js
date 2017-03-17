@@ -42,7 +42,13 @@ describe(testSuite,
                 } else {
                   if (subscriptions.status<200 || subscriptions.status>=299)
                     logger.warn("status is::",subscriptions.status);
-                  subscriptionId = _.first(subscriptions).id;
+
+                  if (_.isEmpty(subscriptions))
+                    logger.warn('No subscriptions found, skipping subsequent ' +
+                      'testcases');
+                  else
+                    subscriptionId = _.first(subscriptions).id;
+
                   projectId = nconf.get("shiptest-GITHUB_ORG_1:projectId");
                   return done();
                 }
@@ -54,6 +60,9 @@ describe(testSuite,
         it('Enter encrypt value with alphabets and encrypt',
           function (done) {
             this.timeout(0);
+
+            if (!subscriptionId) return done();
+            if (!projectId) return done();
 
             var bag = {
               body: {
@@ -86,6 +95,9 @@ describe(testSuite,
           function (done) {
             this.timeout(0);
 
+            if (!subscriptionId) return done();
+            if (!projectId) return done();
+
             var bag = {
               body: {
                 clearText : '123456789101123467890726467345563'
@@ -116,6 +128,9 @@ describe(testSuite,
         it('Enter encrypt value with alphanumeric and encrypt',
           function (done) {
             this.timeout(0);
+
+            if (!subscriptionId) return done();
+            if (!projectId) return done();
 
             var bag = {
               body: {
@@ -148,6 +163,9 @@ describe(testSuite,
           function (done) {
             this.timeout(0);
 
+            if (!subscriptionId) return done();
+            if (!projectId) return done();
+
             var bag = {
               body: {
                 clearText : '!@#$%^&()'
@@ -179,6 +197,9 @@ describe(testSuite,
           function (done) {
             this.timeout(0);
 
+            if (!subscriptionId) return done();
+            if (!projectId) return done();
+
             var bag = {
               body: {
                 clearText : ' aa   bb  cc'
@@ -209,6 +230,9 @@ describe(testSuite,
         it('Encrypt value with special characters,numbers,alphabets and encrypt',
           function (done) {
             this.timeout(0);
+
+            if (!subscriptionId) return done();
+            if (!projectId) return done();
 
             var bag = {
               body: {
@@ -242,6 +266,9 @@ describe(testSuite,
           function (done) {
             this.timeout(0);
 
+            if (!subscriptionId) return done();
+            if (!projectId) return done();
+
             var bag = {
               body: {
                 clearText : 'foo:fubu'
@@ -273,6 +300,9 @@ describe(testSuite,
         it('Encrypt value with foo= fubu',
           function (done) {
             this.timeout(0);
+
+            if (!subscriptionId) return done();
+            if (!projectId) return done();
 
             var bag = {
               body: {
