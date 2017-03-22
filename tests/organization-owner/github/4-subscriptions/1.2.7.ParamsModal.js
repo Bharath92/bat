@@ -57,7 +57,7 @@ describe(testSuite,
           function (done) {
             this.timeout(0);
 
-            if (!resource) return done();
+            if (_.isEmpty(resource)) return done();
             var query = util.format(
               'resourceIds=%s&subscriptionIds=%s&sortBy=id&limit=1', resource.id,
               resource.subscriptionId);
@@ -83,7 +83,7 @@ describe(testSuite,
           function (done) {
             this.timeout(0);
 
-            if (!resource) return done();
+            if (_.isEmpty(resource)) return done();
 
             var newVersion = {
               resourceId: resource.id,
