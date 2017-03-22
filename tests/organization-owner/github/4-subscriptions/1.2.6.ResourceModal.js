@@ -59,7 +59,7 @@ describe(testSuite,
           function (done) {
             this.timeout(0);
 
-            if (!resource) return done();
+            if (_.isEmpty(resource)) return done();
 
             var subIntId = resource.subscriptionIntegrationId;
             shippable.getSubscriptionIntegrationById(subIntId,
@@ -83,7 +83,7 @@ describe(testSuite,
           function (done) {
             this.timeout(0);
 
-            if (!resource) return done();
+            if (_.isEmpty(resource)) return done();
 
             var query = util.format(
               'resourceIds=%s&subscriptionIds=%s&limit=%s&skip=%s', resource.id,
