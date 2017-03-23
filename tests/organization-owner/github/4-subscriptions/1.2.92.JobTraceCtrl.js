@@ -182,9 +182,17 @@ function _getResources(bag, done) {
         }
         resource = _.first(_.where(resources, {"isJob": true}));
 
+        if (!resource.isConsistent) {
+          bag.isStatusCompleted = true;
+          logger.warn(util.format('InConsistent resource: %s wont have version',
+            resource.name));
+        }
+
         if (resource.lastVersionId)
           bag.isStatusCompleted = true;
 
+        // If job is in processing state, then resouce will not have versionId,
+        // waiting until job gets a completed state.
         if (!bag.isStatusCompleted) {
           bag.timeoutLength *= 2;
           if (bag.timeoutLength > bag.timeoutLimit)
