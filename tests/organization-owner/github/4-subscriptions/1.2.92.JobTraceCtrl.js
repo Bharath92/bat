@@ -191,6 +191,8 @@ function _getResources(bag, done) {
         if (resource.lastVersionId)
           bag.isStatusCompleted = true;
 
+        // If job is in processing state, then resouce will not have versionId,
+        // waiting until job gets a completed state.
         if (!bag.isStatusCompleted) {
           bag.timeoutLength *= 2;
           if (bag.timeoutLength > bag.timeoutLimit)
