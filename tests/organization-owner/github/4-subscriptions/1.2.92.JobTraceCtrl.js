@@ -184,7 +184,8 @@ function _getResources(bag, done) {
 
         if (!resource.isConsistent) {
           bag.isStatusCompleted = true;
-          logger.warn('InConsistent resources wont have version.');
+          logger.warn(util.format('InConsistent resource: %s wont have version',
+            resource.name));
         }
 
         if (resource.lastVersionId)
