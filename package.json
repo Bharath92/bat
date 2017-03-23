@@ -12,7 +12,7 @@
     "test-tokenExchange": "./node_modules/mocha/bin/mocha tests/testTokenExchange.js",
     "test-getAccounts": "./node_modules/mocha/bin/mocha tests/getAccounts.js",
     "test-deleteAccounts": "./node_modules/mocha/bin/mocha tests/deleteAccount.js",
-    "test-organizationOwner": "./node_modules/mocha/bin/mocha -S tests/organization-owner/github/**/*.js"
+    "test-organizationOwner": "./node_modules/mocha/bin/mocha -S -b tests/organization-owner/github/**/*.js"
   },
   "author": "Avi Cavale <avi@shippable.com> (http://shippable.com/)",
   "dependencies": {
