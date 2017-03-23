@@ -182,6 +182,11 @@ function _getResources(bag, done) {
         }
         resource = _.first(_.where(resources, {"isJob": true}));
 
+        if (!resource.isConsistent) {
+          bag.isStatusCompleted = true;
+          logger.warn('InConsistent resources wont have version.');
+        }
+
         if (resource.lastVersionId)
           bag.isStatusCompleted = true;
 
