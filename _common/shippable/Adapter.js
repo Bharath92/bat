@@ -1347,7 +1347,7 @@ function _performCall(bag, next) {
 
             return;
           } else {
-            logger.warn(util.format('%s returned status %s with error %s',
+            logger.info(util.format('%s returned status %s with error %s',
               bag.who, res && res.statusCode, err));
             bag.err = err;
           }
