@@ -791,6 +791,7 @@ describe(testSuite,
                           '\n- [ ] %s: Edit subIntgeration failed with error: %s',
                           testSuite, err);
                       testCaseErrors.push(testCase);
+                      logger.warn(err);
                       assert.equal(err, null);
                       return nextSubInt();
                     } else {
