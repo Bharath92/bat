@@ -792,6 +792,7 @@ describe(testSuite,
                           testSuite, err);
                       testCaseErrors.push(testCase);
                       logger.warn(err);
+                      logger.warn('subInt is::',subInt);
                       assert.equal(err, null);
                       return nextSubInt();
                     } else {
