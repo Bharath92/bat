@@ -60,7 +60,8 @@ describe('Add Integrations',
             this.timeout(0);
             var shippable = new Shippable(config.apiToken);
 
-            shippable.getAccountIntegrations('',
+            var query = util.format('names=%s', 'github');
+            shippable.getAccountIntegrations(query,
               function(err, accInts) {
                 if (err) {
                   isTestFailed = true;

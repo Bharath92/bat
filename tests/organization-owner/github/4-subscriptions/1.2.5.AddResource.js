@@ -70,7 +70,7 @@ describe(testSuite,
             this.timeout(0);
 
             var query = util.format('names=%s', 'github');
-            shippable.getAccountIntegrations('',
+            shippable.getAccountIntegrations(query,
               function(err, accInts) {
                 if (err) {
                   isTestFailed = true;
