@@ -173,7 +173,7 @@ describe(testSuite,
             if (!clusterNodeId) return done();
 
             shippable.deleteClusterNodeById(clusterNodeId,
-              function(err) {
+              function(err, body) {
                 if (err) {
                   isTestFailed = true;
                   var testCase =
@@ -183,7 +183,7 @@ describe(testSuite,
 
                   // TODO: Added for debugging. Remove once done.
                   logger.warn('Failed clusterNodeId', clusterNodeId);
-                  logger.warn('Error: ', util.inspect(err));
+                  logger.warn('Error: ', util.inspect(body));
 
                   testCaseErrors.push(testCase);
                   assert.equal(err, null);
