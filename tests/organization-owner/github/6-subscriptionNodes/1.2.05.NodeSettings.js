@@ -180,6 +180,11 @@ describe(testSuite,
                     util.format(
                       '\n- [ ] %s: deleteClusterNodeById failed with error: %s',
                       testSuiteDesc, err);
+
+                  // TODO: Added for debugging. Remove once done.
+                  logger.warn('Failed clusterNodeId', clusterNodeId);
+                  logger.warn('Error: ', util.inspect(err));
+
                   testCaseErrors.push(testCase);
                   assert.equal(err, null);
                 }
