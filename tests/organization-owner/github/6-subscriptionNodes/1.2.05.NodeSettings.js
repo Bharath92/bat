@@ -172,25 +172,52 @@ describe(testSuite,
 
             if (!clusterNodeId) return done();
 
-            shippable.deleteClusterNodeById(clusterNodeId,
-              function(err, body) {
-                if (err) {
-                  isTestFailed = true;
-                  var testCase =
-                    util.format(
-                      '\n- [ ] %s: deleteClusterNodeById failed with error: %s',
-                      testSuiteDesc, err);
+            var time = 2;
+            var checkIfClusterNodeProcessing = function (done) {
+              shippable.getClusterNodeById(clusterNodeId,
+                function (err, clusterNode) {
+                  if (err) {
+                    logger.error(util.format('getClusterNodeById returned' +
+                      'error %s for id: ', err, clusterNodeId)
+                    );
+                    return done();
+                  }
 
-                  // TODO: Added for debugging. Remove once done.
-                  logger.warn('Failed clusterNodeId', clusterNodeId);
-                  logger.warn('Error: ', util.inspect(body));
+                  if (clusterNode.statusCode === 20) {
+                    time *= 2;
+                    if (time > 64) time = 2;
+                    logger.warn(util.format('Node %s is in processing' +
+                      ' state, retrying in %s seconds', clusterNodeId,
+                      time));
+                    return setTimeout(
+                      function (done) {
+                        checkIfClusterNodeProcessing(done);
+                      }, time * 1000
+                    );
+                  }
+                  shippable.deleteClusterNodeById(clusterNodeId,
+                    function(err, body) {
+                      if (err) {
+                        isTestFailed = true;
+                        var testCase =
+                          util.format(
+                            '\n- [ ] %s: deleteClusterNodeById failed with ' +
+                            'error: %s', testSuiteDesc, err);
 
-                  testCaseErrors.push(testCase);
-                  assert.equal(err, null);
+                        // TODO: Added for debugging. Remove once done.
+                        logger.warn('Failed clusterNodeId', clusterNodeId);
+                        logger.warn('Error: ', util.inspect(body));
+
+                        testCaseErrors.push(testCase);
+                        assert.equal(err, null);
+                      }
+                      return done();
+                    }
+                  );
                 }
-                return done();
-              }
-            );
+              );
+            };
+            return checkIfClusterNodeProcessing(done);
           }
         );
 
