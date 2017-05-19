@@ -173,7 +173,7 @@ describe(testSuite,
             if (!clusterNodeId) return done();
 
             var time = 2;
-            var checkIfClusterNodeProcessing = function (done) {
+            var checkIfClusterNodeProcessing = function () {
               shippable.getClusterNodeById(clusterNodeId,
                 function (err, clusterNode) {
                   if (err) {
@@ -190,8 +190,8 @@ describe(testSuite,
                       ' state, retrying in %s seconds', clusterNodeId,
                       time));
                     return setTimeout(
-                      function (done) {
-                        checkIfClusterNodeProcessing(done);
+                      function () {
+                        checkIfClusterNodeProcessing();
                       }, time * 1000
                     );
                   }
@@ -217,7 +217,7 @@ describe(testSuite,
                 }
               );
             };
-            return checkIfClusterNodeProcessing(done);
+            return checkIfClusterNodeProcessing();
           }
         );
 
