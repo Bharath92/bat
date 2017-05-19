@@ -115,11 +115,11 @@ describe('Add Integrations',
                 },
                 {
                   "label": "sshPort",
-                  "value": 22
+                  "value": '22'
                 },
                 {
                   "label": "subscriptionProjectLimit",
-                  "value": 100
+                  "value": '100'
                 }
               ]
             };
