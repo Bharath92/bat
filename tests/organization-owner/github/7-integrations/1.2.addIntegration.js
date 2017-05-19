@@ -100,8 +100,6 @@ describe('Add Integrations',
               "masterName": "gitlabCreds",
               "masterType": "generic",
               "name": name,
-              "sshPort": 22,
-              "subscriptionProjectLimit": 100,
               "formJSONValues": [
                 {
                   "label": "password",
@@ -115,6 +113,14 @@ describe('Add Integrations',
                   "label": "username",
                   "value": name
                 },
+                {
+                  "label": "sshPort",
+                  "value": 22
+                },
+                {
+                  "label": "subscriptionProjectLimit",
+                  "value": 100
+                }
               ]
             };
             shippable.postAccountIntegration(body,
