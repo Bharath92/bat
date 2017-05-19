@@ -32,25 +32,38 @@ describe('Get shippable token',
     before(function(done) {
       async.each(tokens,
         function(token, nextToken) {
-          request({
-            url: nconf.get('API_URL') +
-              '/accounts/auth/58a42b0007c7cf1300b9a828',
-            method: 'POST',
-            json: {
-              accessToken: token.githubToken
+          var time = 1;
+          var postAuth = function () {
+            request({
+              url: nconf.get('API_URL') +
+                '/accounts/auth/58a42b0007c7cf1300b9a828',
+              method: 'POST',
+              json: {
+                accessToken: token.githubToken
+              }
+            },
+            function (err, res, body) {
+              if (res && res.statusCode > 499 || err) {
+                time *= 2;
+                if (time > 64) time = 2;
+                var statusCode = (res && res.statusCode) || 'connection error';
+                console.log('Status code: ' + statusCode + '. Retrying in ' +
+                  time + ' seconds.');
+                return setTimeout(postAuth, time * 1000);
+              } else if (res && res.statusCode !== 200) {
+                console.log('Failed with statusCode: '+ res.statusCode +
+                  ' & error: ', body);
+                return nextToken(err);
+              } else {
+                bag.body = body;
+                token.apiToken = body.apiToken;
+                return nextToken();
+              }
             }
-          },
-          function (err, res, body) {
-            if (err) {
-              console.log('Failed');
-              return nextToken(err);
-            } else {
-              bag.body = body;
-              token.apiToken = body.apiToken;
-              return nextToken();
-            }
-          });
-        },
+          );
+        };
+        postAuth();
+      },
         function (err) {
           if (err)
             console.log('Failed');
