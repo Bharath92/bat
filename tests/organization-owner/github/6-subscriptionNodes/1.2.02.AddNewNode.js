@@ -132,7 +132,7 @@ describe(testSuite,
             this.timeout(0);
 
             if (isDynamicNode) return done();
-            if (!clusterNodeId) return don();
+            if (!clusterNodeId) return done();
 
             shippable.getClusterNodeById(clusterNodeId,
               function(err) {
