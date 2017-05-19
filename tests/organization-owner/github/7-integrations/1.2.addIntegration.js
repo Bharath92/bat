@@ -100,6 +100,8 @@ describe('Add Integrations',
               "masterName": "gitlabCreds",
               "masterType": "generic",
               "name": name,
+              "sshPort": 22,
+              "subscriptionProjectLimit": 100,
               "formJSONValues": [
                 {
                   "label": "password",
@@ -117,9 +119,6 @@ describe('Add Integrations',
             };
             shippable.postAccountIntegration(body,
               function(err,res) {
-                // TODO: remove the debug log later
-                logger.warn('postAccountIntegration res: ', util.inspect(res));
-                logger.warn('postAccountIntegration err: ', util.inspect(err));
                 if (err) {
                   isTestFailed = true;
                   var testCase =
