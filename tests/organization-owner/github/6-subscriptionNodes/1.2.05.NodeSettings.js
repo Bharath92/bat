@@ -173,6 +173,8 @@ describe(testSuite,
             if (!clusterNodeId) return done();
 
             var time = 2;
+            var retries = 0;
+            var retryLimit = 15;
             var checkIfClusterNodeProcessing = function () {
               shippable.getClusterNodeById(clusterNodeId,
                 function (err, clusterNode) {
@@ -183,9 +185,10 @@ describe(testSuite,
                     return done();
                   }
 
-                  if (clusterNode.statusCode === 20) {
+                  if (clusterNode.statusCode === 20 && retries < retryLimit) {
                     time *= 2;
                     if (time > 64) time = 2;
+                    retries++;
                     logger.warn(util.format('Node %s is in processing' +
                       ' state, retrying in %s seconds', clusterNodeId,
                       time));
