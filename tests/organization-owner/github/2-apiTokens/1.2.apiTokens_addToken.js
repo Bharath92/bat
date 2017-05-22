@@ -1,3 +1,5 @@
+'use strict';
+
 var mocha = require('mocha');
 var nconf = require('nconf');
 var chai = require('chai');
@@ -29,22 +31,52 @@ describe('Add Tokens with different name',
             var name = "Q6sW4LKREx20/Zw0g5Mpr6gJeZWzIsu2f6t3jJ4/sDGVu7PMWqFD" +
                          "v4KAGF97Tc9BE/5/LJ+D5SVSdHdY2oe7cwQrblqWA79riC8yS1c" +
                          "6Le27bGMjoqBSs7Opdd99C+SwdS1G1KDzq39eKXhXyoIM7q";
-            shippable.postAccountTokens(name, ownerAccountId,
-              function(err) {
-                if (err) {
-                  isTestFailed = true;
-                  var testCase =
-                    util.format('\n- [ ] %s: Fails to add token with token' +
-                                ' name with 150 characters: %s', testSuite, name);
-                  testCaseErrors.push(testCase);
-                  assert.equal(err, null);
-                  return done();
-                } else {
-                  logger.debug('Adds token with token name with 150 characters');
-                  return done();
+            var time = 1;
+            var count = 1;
+            var retryLimit = 30;
+            var checkIfAccountSyncing = function () {
+              var query = util.format("accountIds=%s", ownerAccountId);
+              shippable.getAccounts(query,
+                function (err, accounts) {
+                  if (err) {
+                    var testCase =
+                      util.format('\n- [ ] %s: Fails to add token with token' +
+                                  ' name with 150 characters: %s', testSuite, name);
+                    testCaseErrors.push(testCase);
+                    assert.equal(err, null);
+                    return done();
+                  }
+                  time *= 2;
+                  if (time > 16) time = 2;
+                  var account = _.first(accounts);
+                  if (account.isSyncing) {
+                    logger.warn(util.format('Account syncing. Retrying in %s ' +
+                      'seconds', time));
+                    if (count < retryLimit) {
+                      count++;
+                      return setTimeout(checkIfAccountSyncing, time * 1000);
+                    }
+                  }
+                  shippable.postAccountTokens(name, ownerAccountId,
+                    function(err) {
+                      if (err) {
+                        isTestFailed = true;
+                        var testCase =
+                          util.format('\n- [ ] %s: Fails to add token with token' +
+                                      ' name with 150 characters: %s', testSuite, name);
+                        testCaseErrors.push(testCase);
+                        assert.equal(err, null);
+                        return done();
+                      } else {
+                        logger.debug('Adds token with token name with 150 characters');
+                        return done();
+                      }
+                    }
+                  );
                 }
-              }
-            );
+              );
+            };
+            checkIfAccountSyncing();
           }
         );
 
