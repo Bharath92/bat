@@ -1381,5 +1381,10 @@ function _parseBody(bag, next) {
       }
     }
   }
+
+  if (bag.err) {
+    logger.error('Error: ', bag.err);
+    logger.error('Response: ', bag.parsedBody || bag.body);
+  }
   return next();
 }
