@@ -49,7 +49,9 @@ describe('Add Tokens with different name',
                   time *= 2;
                   if (time > 16) time = 2;
                   var account = _.first(accounts);
-                  if (account.isSyncing) {
+                  var accountSyncing = !!account.isSyncing ||
+                    !account.lastSyncStartDate;
+                  if (accountSyncing) {
                     logger.warn(util.format('Account syncing. Retrying in %s ' +
                       'seconds', time));
                     if (count < retryLimit) {
